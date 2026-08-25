@@ -16,241 +16,247 @@ struct NowPlayingView: View {
     
     var body: some View {
         if let song = playerManager.currentSong {
-            ZStack {
-                // MARK: - Dynamic Ambient Blurred Background
-                ZStack {
-                    AppTheme.backgroundDark.ignoresSafeArea()
-                    
-                    // Ambient Gradient Orbs
-                    RadialGradient(
-                        gradient: Gradient(colors: [
-                            song.gradientColors.first?.opacity(0.55) ?? AppTheme.primaryAccent.opacity(0.5),
-                            Color.clear
-                        ]),
-                        center: .topLeading,
-                        startRadius: 50,
-                        endRadius: 380
-                    )
-                    .ignoresSafeArea()
-                    
-                    RadialGradient(
-                        gradient: Gradient(colors: [
-                            song.gradientColors.last?.opacity(0.45) ?? AppTheme.secondaryAccent.opacity(0.4),
-                            Color.clear
-                        ]),
-                        center: .bottomTrailing,
-                        startRadius: 80,
-                        endRadius: 420
-                    )
-                    .ignoresSafeArea()
-                    
-                    // Subtle Noise / Blur overlay
-                    Color.black.opacity(0.25).ignoresSafeArea()
-                }
+            GeometryReader { geo in
+                let screenWidth = geo.size.width
+                let screenHeight = geo.size.height
+                let isCompact = screenHeight < 720
+                let artworkSize = isCompact ? min(screenWidth - 60, screenHeight * 0.32) : min(screenWidth - 56, min(screenHeight * 0.38, 340))
+                let playButtonSize: CGFloat = isCompact ? 64 : 72
+                let mainHorizontalPadding: CGFloat = screenWidth > 500 ? 40 : 20
                 
-                // MARK: - Main Content
-                VStack(spacing: 0) {
-                    // Top Bar
-                    topBar(song: song)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 14)
-                    
-                    Spacer(minLength: 12)
-                    
-                    // Album Artwork / Vinyl Record Disc Center
+                ZStack {
+                    // MARK: - Dynamic Ambient Blurred Background
                     ZStack {
-                        if playerManager.isVinylMode {
-                            VinylRecordView(
-                                song: song,
-                                isPlaying: playerManager.isPlaying,
-                                size: min(UIScreen.main.bounds.width - 64, 300)
-                            )
-                            .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
-                        } else {
-                            VStack {
-                                RemoteImageView(
-                                    url: song.artworkURL,
-                                    placeholderGradient: LinearGradient(
-                                        gradient: Gradient(colors: song.gradientColors),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    cornerRadius: 24
-                                )
-                                .frame(
-                                    width: min(UIScreen.main.bounds.width - 64, 310),
-                                    height: min(UIScreen.main.bounds.width - 64, 310)
-                                )
-                                .shadow(
-                                    color: song.gradientColors.first?.opacity(0.5) ?? Color.black.opacity(0.4),
-                                    radius: playerManager.isPlaying ? 28 : 14,
-                                    x: 0,
-                                    y: 12
-                                )
-                                .scaleEffect(playerManager.isPlaying ? 1.0 : 0.94)
-                                .animation(Animation.spring(response: 0.4, dampingFraction: 0.6), value: playerManager.isPlaying)
-                            }
-                            .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
-                        }
-                    }
-                    .frame(height: 320)
-                    
-                    Spacer(minLength: 16)
-                    
-                    // Track Title & Favorite Button
-                    HStack(alignment: .center) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(song.title)
-                                .font(.system(size: 22, weight: .bold))
-                                .foregroundColor(Color.white)
-                                .lineLimit(1)
-                            
-                            Text(song.artist)
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(Color.white.opacity(0.75))
-                                .lineLimit(1)
-                            
-                            if let year = song.year {
-                                Text("\(song.album) • \(year)")
-                                    .font(.system(size: 12, weight: .regular))
-                                    .foregroundColor(Color.white.opacity(0.45))
-                                    .lineLimit(1)
-                            }
-                        }
+                        AppTheme.backgroundDark.ignoresSafeArea()
                         
-                        Spacer()
-                        
-                        // Animated Live Visualizer
-                        AudioVisualizerView(
-                            isPlaying: playerManager.isPlaying,
-                            barCount: 10,
-                            accentColors: song.gradientColors
+                        // Ambient Gradient Orbs
+                        RadialGradient(
+                            gradient: Gradient(colors: [
+                                song.gradientColors.first?.opacity(0.55) ?? AppTheme.primaryAccent.opacity(0.5),
+                                Color.clear
+                            ]),
+                            center: .topLeading,
+                            startRadius: 50,
+                            endRadius: max(screenWidth, 380)
                         )
-                        .padding(.trailing, 8)
+                        .ignoresSafeArea()
                         
-                        // Like Button
-                        Button(action: {
-                            dataService.toggleFavorite(song: song)
-                            HapticManager.shared.impact(.medium)
-                        }) {
-                            Image(systemName: song.isFavorite ? "heart.fill" : "heart")
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(song.isFavorite ? AppTheme.secondaryAccent : Color.white.opacity(0.8))
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                        RadialGradient(
+                            gradient: Gradient(colors: [
+                                song.gradientColors.last?.opacity(0.45) ?? AppTheme.secondaryAccent.opacity(0.4),
+                                Color.clear
+                            ]),
+                            center: .bottomTrailing,
+                            startRadius: 80,
+                            endRadius: max(screenWidth, 420)
+                        )
+                        .ignoresSafeArea()
+                        
+                        // Subtle Noise / Blur overlay
+                        Color.black.opacity(0.25).ignoresSafeArea()
                     }
-                    .padding(.horizontal, 24)
                     
-                    // MARK: - Scrubber Slider
-                    CustomScrubberSlider(
-                        progress: $playerManager.playbackProgress,
-                        currentTimeText: playerManager.currentTimeString,
-                        durationText: playerManager.remainingTimeString,
-                        accentGradient: LinearGradient(
-                            gradient: Gradient(colors: song.gradientColors),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        ),
-                        onScrubEnd: { newProgress in
-                            playerManager.seek(to: newProgress)
-                        }
-                    )
-                    .padding(.horizontal, 24)
-                    .padding(.top, 14)
-                    
-                    // MARK: - Main Playback Controls
-                    HStack(spacing: 20) {
-                        // Shuffle Toggle
-                        Button(action: {
-                            playerManager.toggleShuffle()
-                        }) {
-                            Image(systemName: "shuffle")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(playerManager.isShuffled ? AppTheme.cyanAccent : Color.white.opacity(0.6))
-                        }
+                    // MARK: - Main Content Container
+                    VStack(spacing: 0) {
+                        // Top Bar
+                        topBar(song: song)
+                            .padding(.horizontal, mainHorizontalPadding)
+                            .padding(.top, isCompact ? 8 : 14)
                         
-                        Spacer()
+                        Spacer(minLength: isCompact ? 8 : 14)
                         
-                        // Skip -15s
-                        Button(action: {
-                            playerManager.skipBackward(seconds: 15)
-                        }) {
-                            Image(systemName: "gobackward.15")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(Color.white.opacity(0.85))
-                        }
-                        
-                        // Previous Track
-                        Button(action: {
-                            playerManager.previous()
-                        }) {
-                            Image(systemName: "backward.fill")
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(Color.white)
-                        }
-                        
-                        // Play / Pause Large Glow Button
-                        Button(action: {
-                            playerManager.togglePlayPause()
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .fill(
-                                        LinearGradient(
+                        // Album Artwork / Vinyl Record Disc Center
+                        ZStack {
+                            if playerManager.isVinylMode {
+                                VinylRecordView(
+                                    song: song,
+                                    isPlaying: playerManager.isPlaying,
+                                    size: artworkSize
+                                )
+                                .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
+                            } else {
+                                VStack {
+                                    RemoteImageView(
+                                        url: song.artworkURL,
+                                        placeholderGradient: LinearGradient(
                                             gradient: Gradient(colors: song.gradientColors),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
-                                        )
+                                        ),
+                                        cornerRadius: isCompact ? 18 : 24
                                     )
-                                    .frame(width: 72, height: 72)
-                                    .shadow(color: song.gradientColors.first?.opacity(0.6) ?? AppTheme.primaryAccent.opacity(0.6), radius: 18, x: 0, y: 8)
-                                
-                                Image(systemName: playerManager.isPlaying ? "pause.fill" : "play.fill")
-                                    .font(.system(size: 30, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .offset(x: playerManager.isPlaying ? 0 : 2)
+                                    .frame(width: artworkSize, height: artworkSize)
+                                    .shadow(
+                                        color: song.gradientColors.first?.opacity(0.5) ?? Color.black.opacity(0.4),
+                                        radius: playerManager.isPlaying ? 24 : 12,
+                                        x: 0,
+                                        y: 10
+                                    )
+                                    .scaleEffect(playerManager.isPlaying ? 1.0 : 0.94)
+                                    .animation(Animation.spring(response: 0.4, dampingFraction: 0.6), value: playerManager.isPlaying)
+                                }
+                                .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
                             }
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .frame(width: artworkSize, height: artworkSize)
                         
-                        // Next Track
-                        Button(action: {
-                            playerManager.next()
-                        }) {
-                            Image(systemName: "forward.fill")
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(Color.white)
+                        Spacer(minLength: isCompact ? 10 : 16)
+                        
+                        // Track Title & Favorite Button
+                        HStack(alignment: .center) {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(song.title)
+                                    .font(.system(size: isCompact ? 19 : 22, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .lineLimit(1)
+                                
+                                Text(song.artist)
+                                    .font(.system(size: isCompact ? 14 : 16, weight: .medium))
+                                    .foregroundColor(Color.white.opacity(0.75))
+                                    .lineLimit(1)
+                                
+                                if let year = song.year {
+                                    Text("\(song.album) • \(year)")
+                                        .font(.system(size: isCompact ? 11 : 12, weight: .regular))
+                                        .foregroundColor(Color.white.opacity(0.45))
+                                        .lineLimit(1)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            // Animated Live Visualizer
+                            AudioVisualizerView(
+                                isPlaying: playerManager.isPlaying,
+                                barCount: isCompact ? 8 : 10,
+                                accentColors: song.gradientColors
+                            )
+                            .padding(.trailing, 8)
+                            
+                            // Like Button
+                            Button(action: {
+                                dataService.toggleFavorite(song: song)
+                                HapticManager.shared.impact(.medium)
+                            }) {
+                                Image(systemName: song.isFavorite ? "heart.fill" : "heart")
+                                    .font(.system(size: isCompact ? 22 : 24, weight: .bold))
+                                    .foregroundColor(song.isFavorite ? AppTheme.secondaryAccent : Color.white.opacity(0.8))
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
+                        .padding(.horizontal, mainHorizontalPadding)
                         
-                        // Skip +15s
-                        Button(action: {
-                            playerManager.skipForward(seconds: 15)
-                        }) {
-                            Image(systemName: "goforward.15")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(Color.white.opacity(0.85))
+                        // MARK: - Scrubber Slider
+                        CustomScrubberSlider(
+                            progress: $playerManager.playbackProgress,
+                            currentTimeText: playerManager.currentTimeString,
+                            durationText: playerManager.remainingTimeString,
+                            accentGradient: LinearGradient(
+                                gradient: Gradient(colors: song.gradientColors),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            ),
+                            onScrubEnd: { newProgress in
+                                playerManager.seek(to: newProgress)
+                            }
+                        )
+                        .padding(.horizontal, mainHorizontalPadding)
+                        .padding(.top, isCompact ? 8 : 14)
+                        
+                        // MARK: - Main Playback Controls
+                        HStack(spacing: isCompact ? 14 : 20) {
+                            // Shuffle Toggle
+                            Button(action: {
+                                playerManager.toggleShuffle()
+                            }) {
+                                Image(systemName: "shuffle")
+                                    .font(.system(size: isCompact ? 16 : 18, weight: .bold))
+                                    .foregroundColor(playerManager.isShuffled ? AppTheme.cyanAccent : Color.white.opacity(0.6))
+                            }
+                            
+                            Spacer()
+                            
+                            // Skip -15s
+                            Button(action: {
+                                playerManager.skipBackward(seconds: 15)
+                            }) {
+                                Image(systemName: "gobackward.15")
+                                    .font(.system(size: isCompact ? 18 : 20, weight: .semibold))
+                                    .foregroundColor(Color.white.opacity(0.85))
+                            }
+                            
+                            // Previous Track
+                            Button(action: {
+                                playerManager.previous()
+                            }) {
+                                Image(systemName: "backward.fill")
+                                    .font(.system(size: isCompact ? 22 : 24, weight: .bold))
+                                    .foregroundColor(Color.white)
+                            }
+                            
+                            // Play / Pause Large Glow Button
+                            Button(action: {
+                                playerManager.togglePlayPause()
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: song.gradientColors),
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: playButtonSize, height: playButtonSize)
+                                        .shadow(color: song.gradientColors.first?.opacity(0.6) ?? AppTheme.primaryAccent.opacity(0.6), radius: 16, x: 0, y: 6)
+                                    
+                                    Image(systemName: playerManager.isPlaying ? "pause.fill" : "play.fill")
+                                        .font(.system(size: isCompact ? 26 : 30, weight: .bold))
+                                        .foregroundColor(Color.white)
+                                        .offset(x: playerManager.isPlaying ? 0 : 2)
+                                }
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            
+                            // Next Track
+                            Button(action: {
+                                playerManager.next()
+                            }) {
+                                Image(systemName: "forward.fill")
+                                    .font(.system(size: isCompact ? 22 : 24, weight: .bold))
+                                    .foregroundColor(Color.white)
+                            }
+                            
+                            // Skip +15s
+                            Button(action: {
+                                playerManager.skipForward(seconds: 15)
+                            }) {
+                                Image(systemName: "goforward.15")
+                                    .font(.system(size: isCompact ? 18 : 20, weight: .semibold))
+                                    .foregroundColor(Color.white.opacity(0.85))
+                            }
+                            
+                            Spacer()
+                            
+                            // Repeat Toggle
+                            Button(action: {
+                                playerManager.toggleRepeat()
+                            }) {
+                                Image(systemName: playerManager.repeatMode.iconName)
+                                    .font(.system(size: isCompact ? 16 : 18, weight: .bold))
+                                    .foregroundColor(playerManager.repeatMode != .off ? AppTheme.cyanAccent : Color.white.opacity(0.6))
+                            }
                         }
+                        .padding(.horizontal, mainHorizontalPadding)
+                        .padding(.top, isCompact ? 10 : 16)
                         
-                        Spacer()
+                        Spacer(minLength: isCompact ? 10 : 16)
                         
-                        // Repeat Toggle
-                        Button(action: {
-                            playerManager.toggleRepeat()
-                        }) {
-                            Image(systemName: playerManager.repeatMode.iconName)
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(playerManager.repeatMode != .off ? AppTheme.cyanAccent : Color.white.opacity(0.6))
-                        }
+                        // MARK: - Bottom Utility Bar (Speed, Timer, Lyrics, Queue, Vinyl Toggle)
+                        bottomUtilityBar(song: song, isCompact: isCompact)
+                            .padding(.horizontal, mainHorizontalPadding)
+                            .padding(.bottom, isCompact ? 12 : 20)
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 16)
-                    
-                    Spacer(minLength: 16)
-                    
-                    // MARK: - Bottom Utility Bar (Speed, Timer, Lyrics, Queue, Vinyl Toggle)
-                    bottomUtilityBar(song: song)
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 20)
                 }
             }
             .sheet(isPresented: $playerManager.showLyricsSheet) {
@@ -271,9 +277,9 @@ struct NowPlayingView: View {
                 HapticManager.shared.impact(.light)
             }) {
                 Image(systemName: "chevron.down")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 16, weight: .bold))
                     .foregroundColor(Color.white.opacity(0.85))
-                    .frame(width: 40, height: 40)
+                    .frame(width: 38, height: 38)
                     .background(Color.white.opacity(0.1))
                     .clipShape(Circle())
             }
@@ -286,7 +292,7 @@ struct NowPlayingView: View {
                     .foregroundColor(Color.white.opacity(0.5))
                 
                 Text(song.genre.uppercased())
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
                     .foregroundColor(Color.white)
             }
             
@@ -300,9 +306,9 @@ struct NowPlayingView: View {
                 HapticManager.shared.selection()
             }) {
                 Image(systemName: playerManager.isVinylMode ? "square.fill" : "opticaldisc")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 16, weight: .bold))
                     .foregroundColor(playerManager.isVinylMode ? AppTheme.amberAccent : Color.white.opacity(0.85))
-                    .frame(width: 40, height: 40)
+                    .frame(width: 38, height: 38)
                     .background(Color.white.opacity(0.1))
                     .clipShape(Circle())
             }
@@ -310,8 +316,8 @@ struct NowPlayingView: View {
     }
     
     // MARK: - Bottom Utility Bar
-    private func bottomUtilityBar(song: Song) -> some View {
-        HStack(spacing: 16) {
+    private func bottomUtilityBar(song: Song, isCompact: Bool) -> some View {
+        HStack(spacing: isCompact ? 10 : 16) {
             // Playback Speed Button / Menu
             Menu {
                 ForEach([0.5, 0.75, 1.0, 1.25, 1.5, 2.0], id: \.self) { speed in
@@ -328,10 +334,10 @@ struct NowPlayingView: View {
                 }
             } label: {
                 Text(String(format: "%.2fx", playerManager.playbackSpeed))
-                    .font(.system(size: 13, weight: .bold, design: .monospaced))
+                    .font(.system(size: isCompact ? 12 : 13, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.white.opacity(0.85))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, isCompact ? 10 : 12)
+                    .padding(.vertical, isCompact ? 6 : 8)
                     .background(Color.white.opacity(0.1))
                     .clipShape(Capsule())
             }
@@ -346,15 +352,15 @@ struct NowPlayingView: View {
             } label: {
                 HStack(spacing: 4) {
                     Image(systemName: "timer")
-                        .font(.system(size: 14))
+                        .font(.system(size: isCompact ? 12 : 14))
                     if let remaining = playerManager.sleepTimerMinutesRemaining {
                         Text("\(remaining)m")
-                            .font(.system(size: 12, weight: .bold))
+                            .font(.system(size: 11, weight: .bold))
                     }
                 }
                 .foregroundColor(playerManager.sleepTimerMinutesRemaining != nil ? AppTheme.amberAccent : Color.white.opacity(0.85))
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
+                .padding(.horizontal, isCompact ? 10 : 12)
+                .padding(.vertical, isCompact ? 6 : 8)
                 .background(Color.white.opacity(0.1))
                 .clipShape(Capsule())
             }
@@ -366,15 +372,15 @@ struct NowPlayingView: View {
                 playerManager.showLyricsSheet = true
                 HapticManager.shared.impact(.light)
             }) {
-                HStack(spacing: 6) {
+                HStack(spacing: 5) {
                     Image(systemName: "quote.bubble.fill")
-                        .font(.system(size: 14))
+                        .font(.system(size: isCompact ? 12 : 14))
                     Text("Lyrics")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.system(size: isCompact ? 12 : 13, weight: .semibold))
                 }
                 .foregroundColor(Color.white.opacity(0.9))
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
+                .padding(.horizontal, isCompact ? 10 : 14)
+                .padding(.vertical, isCompact ? 6 : 8)
                 .background(Color.white.opacity(0.12))
                 .clipShape(Capsule())
             }
@@ -385,9 +391,9 @@ struct NowPlayingView: View {
                 HapticManager.shared.impact(.light)
             }) {
                 Image(systemName: "list.bullet")
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: isCompact ? 14 : 16, weight: .bold))
                     .foregroundColor(Color.white.opacity(0.9))
-                    .frame(width: 38, height: 38)
+                    .frame(width: isCompact ? 34 : 38, height: isCompact ? 34 : 38)
                     .background(Color.white.opacity(0.12))
                     .clipShape(Circle())
             }

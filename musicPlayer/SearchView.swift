@@ -221,7 +221,7 @@ struct SearchView: View {
                         .foregroundColor(Color.white)
                         .padding(.horizontal, 20)
                     
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 12)], spacing: 12) {
                         ForEach(browseCategories, id: \.title) { item in
                             Button(action: {
                                 searchText = item.title

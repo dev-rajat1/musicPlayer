@@ -15,46 +15,51 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                AppTheme.backgroundDark.ignoresSafeArea()
+            GeometryReader { geo in
+                let screenWidth = geo.size.width
+                let heroCardWidth = min(screenWidth - 48, 360)
+                let horizontalPadding: CGFloat = screenWidth > 500 ? 32 : 20
                 
-                // Ambient background glow
-                RadialGradient(
-                    gradient: Gradient(colors: [AppTheme.primaryAccent.opacity(0.18), Color.clear]),
-                    center: .topLeading,
-                    startRadius: 20,
-                    endRadius: 350
-                )
-                .ignoresSafeArea()
-                
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 24) {
-                        // Top Greeting Header
-                        headerView
-                            .padding(.horizontal, 20)
-                            .padding(.top, 16)
-                        
-                        // Genre Filter Pills
-                        genrePillBar
-                        
-                        // Featured Hero Carousel
-                        heroBannerSection
-                        
-                        // Quick Play Grid (Recently Played / Favorites)
-                        quickPlaySection
-                            .padding(.horizontal, 20)
-                        
-                        // Trending Bollywood Charts
-                        trendingSection
-                        
-                        // Curated Playlists
-                        playlistsSection
-                        
-                        // Popular Artists
-                        popularArtistsSection
-                        
-                        // Bottom spacer for mini player
-                        Spacer().frame(height: 100)
+                ZStack {
+                    AppTheme.backgroundDark.ignoresSafeArea()
+                    
+                    // Ambient background glow
+                    RadialGradient(
+                        gradient: Gradient(colors: [AppTheme.primaryAccent.opacity(0.18), Color.clear]),
+                        center: .topLeading,
+                        startRadius: 20,
+                        endRadius: max(screenWidth, 350)
+                    )
+                    .ignoresSafeArea()
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(alignment: .leading, spacing: 24) {
+                            // Top Greeting Header
+                            headerView
+                                .padding(.horizontal, horizontalPadding)
+                                .padding(.top, 16)
+                            
+                            // Genre Filter Pills
+                            genrePillBar(horizontalPadding: horizontalPadding)
+                            
+                            // Featured Hero Carousel
+                            heroBannerSection(cardWidth: heroCardWidth, horizontalPadding: horizontalPadding)
+                            
+                            // Quick Play Grid (Recently Played / Favorites)
+                            quickPlaySection(horizontalPadding: horizontalPadding)
+                            
+                            // Trending Bollywood Charts
+                            trendingSection(horizontalPadding: horizontalPadding)
+                            
+                            // Curated Playlists
+                            playlistsSection(horizontalPadding: horizontalPadding)
+                            
+                            // Popular Artists
+                            popularArtistsSection(horizontalPadding: horizontalPadding)
+                            
+                            // Bottom spacer for mini player
+                            Spacer().frame(height: 100)
+                        }
                     }
                 }
             }
@@ -67,7 +72,7 @@ struct HomeView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(greetingText)
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundColor(AppTheme.cyanAccent)
                 
                 Text("Music Hub")
@@ -104,7 +109,7 @@ struct HomeView: View {
     }
     
     // MARK: - Genre Pills
-    private var genrePillBar: some View {
+    private func genrePillBar(horizontalPadding: CGFloat) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
                 ForEach(genrePills, id: \.self) { genre in
@@ -124,12 +129,12 @@ struct HomeView: View {
                     }
                 }
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, horizontalPadding)
         }
     }
     
     // MARK: - Hero Banner Carousel
-    private var heroBannerSection: some View {
+    private func heroBannerSection(cardWidth: CGFloat, horizontalPadding: CGFloat) -> some View {
         let filteredSongs = selectedGenre == "All" ? dataService.allSongs : dataService.allSongs.filter { $0.genre.localizedCaseInsensitiveContains(selectedGenre) }
         let displaySongs = filteredSongs.isEmpty ? dataService.allSongs : filteredSongs
         
@@ -147,7 +152,7 @@ struct HomeView: View {
                             ),
                             cornerRadius: 22
                         )
-                        .frame(width: 310, height: 180)
+                        .frame(width: cardWidth, height: 185)
                         .overlay(
                             LinearGradient(
                                 gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.85)]),
@@ -165,7 +170,7 @@ struct HomeView: View {
                                     .foregroundColor(AppTheme.amberAccent)
                                 
                                 Text(song.title)
-                                    .font(.system(size: 20, weight: .bold))
+                                    .font(.system(size: 19, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .lineLimit(1)
                                 
@@ -195,22 +200,23 @@ struct HomeView: View {
                         }
                         .padding(16)
                     }
-                    .frame(width: 310, height: 180)
+                    .frame(width: cardWidth, height: 185)
                     .shadow(color: Color.black.opacity(0.4), radius: 10, x: 0, y: 6)
                 }
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, horizontalPadding)
         }
     }
     
     // MARK: - Quick Play Grid
-    private var quickPlaySection: some View {
+    private func quickPlaySection(horizontalPadding: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Quick Play")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundColor(Color.white)
+                .padding(.horizontal, horizontalPadding)
             
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 155), spacing: 10)], spacing: 10) {
                 ForEach(dataService.allSongs.prefix(6)) { song in
                     Button(action: {
                         playerManager.play(song: song, in: dataService.allSongs)
@@ -246,11 +252,12 @@ struct HomeView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
             }
+            .padding(.horizontal, horizontalPadding)
         }
     }
     
     // MARK: - Trending Section
-    private var trendingSection: some View {
+    private func trendingSection(horizontalPadding: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text("🔥 Top Bollywood Hits")
@@ -267,7 +274,7 @@ struct HomeView: View {
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(AppTheme.primaryAccent)
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, horizontalPadding)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 14) {
@@ -315,18 +322,18 @@ struct HomeView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, horizontalPadding)
             }
         }
     }
     
     // MARK: - Curated Playlists Section
-    private var playlistsSection: some View {
+    private func playlistsSection(horizontalPadding: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Featured Playlists")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundColor(Color.white)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, horizontalPadding)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 14) {
@@ -374,18 +381,18 @@ struct HomeView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, horizontalPadding)
             }
         }
     }
     
     // MARK: - Popular Artists Section
-    private var popularArtistsSection: some View {
+    private func popularArtistsSection(horizontalPadding: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Popular Artists")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundColor(Color.white)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, horizontalPadding)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
@@ -429,7 +436,7 @@ struct HomeView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, horizontalPadding)
             }
         }
     }
