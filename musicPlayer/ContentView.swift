@@ -13,17 +13,6 @@ struct ContentView: View {
     @StateObject private var dataService = MusicDataService.shared
     @State private var selectedTab: Int = 0
     
-    init() {
-        // Customize UITabBar appearance for modern dark glass look
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(red: 10/255, green: 12/255, blue: 18/255, alpha: 0.96)
-        
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().unselectedItemTintColor = UIColor(white: 0.55, alpha: 1.0)
-    }
-    
     var body: some View {
         ZStack(alignment: .bottom) {
             // Main Tab View
@@ -57,6 +46,9 @@ struct ContentView: View {
                     .tag(3)
             }
             .accentColor(AppTheme.primaryAccent)
+            .onAppear {
+                configureTabBar()
+            }
             
             // Floating Mini Player docked right above tab bar
             if playerManager.currentSong != nil {
@@ -68,6 +60,16 @@ struct ContentView: View {
         .fullScreenCover(isPresented: $playerManager.showFullPlayer) {
             NowPlayingView()
         }
+    }
+    
+    private func configureTabBar() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(red: 10/255, green: 12/255, blue: 18/255, alpha: 0.96)
+        
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().unselectedItemTintColor = UIColor(white: 0.55, alpha: 1.0)
     }
 }
 
