@@ -226,3 +226,60 @@ struct DirectSaavnSong: Codable {
         return nil
     }
 }
+
+// MARK: - iTunes Apple Music API Models (Reliable 100% Free CDN Audio & HD Artwork)
+struct ITunesSearchResponse: Codable {
+    let resultCount: Int
+    let results: [ITunesSong]
+}
+
+struct ITunesSong: Codable {
+    let trackId: Int?
+    let trackName: String?
+    let artistName: String?
+    let collectionName: String?
+    let previewUrl: String?
+    let artworkUrl100: String?
+    let primaryGenreName: String?
+    let trackTimeMillis: Int?
+    let releaseDate: String?
+    
+    var resolvedDuration: TimeInterval {
+        if let millis = trackTimeMillis {
+            return TimeInterval(millis / 1000)
+        }
+        return 210
+    }
+    
+    var highResArtwork: String? {
+        guard let raw = artworkUrl100 else { return nil }
+        return raw.replacingOccurrences(of: "100x100bb.jpg", with: "600x600bb.jpg")
+                  .replacingOccurrences(of: "100x100bb.png", with: "600x600bb.png")
+    }
+    
+    var toSong: Song? {
+        guard let preview = previewUrl, !preview.isEmpty else { return nil }
+        let idString = trackId != nil ? String(trackId!) : UUID().uuidString
+        let yearStr = releaseDate != nil ? String(releaseDate!.prefix(4)) : "2023"
+        
+        return Song(
+            id: "itunes-\(idString)",
+            title: trackName ?? "Bollywood Song",
+            artist: artistName ?? "Bollywood Artist",
+            album: collectionName ?? "Bollywood Hit",
+            duration: resolvedDuration,
+            audioURLString: preview,
+            artworkURLString: highResArtwork,
+            genre: primaryGenreName ?? "Bollywood",
+            isFavorite: false,
+            lyrics: [
+                LyricLine(time: 0, text: "♪ \(trackName ?? "Now Playing") ♪"),
+                LyricLine(time: 8, text: "Artist: \(artistName ?? "Unknown")"),
+                LyricLine(time: 18, text: "Album: \(collectionName ?? "Bollywood")")
+            ],
+            year: yearStr,
+            plays: Int.random(in: 500000...4500000),
+            gradientHexes: ["#FF4E50", "#6366F1"]
+        )
+    }
+}
