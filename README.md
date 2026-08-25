@@ -7,8 +7,7 @@ An ultra-modern, aesthetic, and feature-packed iOS Music Streaming Application b
 [![Swift](https://img.shields.io/badge/Swift-5.9+-FA7343?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org)
 [![iOS](https://img.shields.io/badge/iOS-15.0+-000000?style=for-the-badge&logo=apple&logoColor=white)](https://apple.com/ios)
 [![SwiftUI](https://img.shields.io/badge/UI-SwiftUI-007AFF?style=for-the-badge&logo=swift&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
-[![Author](https://img.shields.io/badge/Developer-@dev--rajat1-8A2BE2?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dev-rajat1)
+
 
 ---
 
@@ -101,13 +100,4 @@ musicPlayer/
 
 ## 👨‍💻 Author
 
-Crafted with ❤️ by **Rajat** ([@dev-rajat1](https://github.com/dev-rajat1))
-
-- **GitHub:** [@dev-rajat1](https://github.com/dev-rajat1)
-- **Project Repository:** [musicPlayer](https://github.com/dev-rajat1/musicPlayer)
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+Crafted by ([@dev-rajat1](https://github.com/dev-rajat1))
