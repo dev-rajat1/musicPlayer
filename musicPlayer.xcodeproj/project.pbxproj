@@ -10,6 +10,19 @@
 		00960F61303D901900CBFB57 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F60303D901900CBFB57 /* AppDelegate.swift */; };
 		00960F63303D901900CBFB57 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F62303D901900CBFB57 /* SceneDelegate.swift */; };
 		00960F65303D901900CBFB57 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F64303D901900CBFB57 /* ContentView.swift */; };
+		00960F92303D901900CBFB57 /* MusicModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F91303D901900CBFB57 /* MusicModels.swift */; };
+		00960F94303D901900CBFB57 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F93303D901900CBFB57 /* Theme.swift */; };
+		00960F96303D901900CBFB57 /* CustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F95303D901900CBFB57 /* CustomComponents.swift */; };
+		00960F98303D901900CBFB57 /* MusicDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F97303D901900CBFB57 /* MusicDataService.swift */; };
+		00960F9A303D901900CBFB57 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F99303D901900CBFB57 /* AudioPlayerManager.swift */; };
+		00960F9C303D901900CBFB57 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F9B303D901900CBFB57 /* MiniPlayerView.swift */; };
+		00960F9E303D901900CBFB57 /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F9D303D901900CBFB57 /* NowPlayingView.swift */; };
+		00960FA0303D901900CBFB57 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960F9F303D901900CBFB57 /* LyricsView.swift */; };
+		00960FA2303D901900CBFB57 /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960FA1303D901900CBFB57 /* QueueView.swift */; };
+		00960FA4303D901900CBFB57 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960FA3303D901900CBFB57 /* HomeView.swift */; };
+		00960FA6303D901900CBFB57 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960FA5303D901900CBFB57 /* SearchView.swift */; };
+		00960FA8303D901900CBFB57 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960FA7303D901900CBFB57 /* LibraryView.swift */; };
+		00960FAA303D901900CBFB57 /* EqualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960FA9303D901900CBFB57 /* EqualizerView.swift */; };
 		00960F67303D901B00CBFB57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00960F66303D901B00CBFB57 /* Assets.xcassets */; };
 		00960F6A303D901B00CBFB57 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00960F69303D901B00CBFB57 /* Preview Assets.xcassets */; };
 		00960F6D303D901C00CBFB57 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00960F6B303D901C00CBFB57 /* LaunchScreen.storyboard */; };
@@ -39,6 +52,19 @@
 		00960F60303D901900CBFB57 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00960F62303D901900CBFB57 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		00960F64303D901900CBFB57 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		00960F91303D901900CBFB57 /* MusicModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicModels.swift; sourceTree = "<group>"; };
+		00960F93303D901900CBFB57 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		00960F95303D901900CBFB57 /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
+		00960F97303D901900CBFB57 /* MusicDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDataService.swift; sourceTree = "<group>"; };
+		00960F99303D901900CBFB57 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
+		00960F9B303D901900CBFB57 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
+		00960F9D303D901900CBFB57 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingView.swift; sourceTree = "<group>"; };
+		00960F9F303D901900CBFB57 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
+		00960FA1303D901900CBFB57 /* QueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueView.swift; sourceTree = "<group>"; };
+		00960FA3303D901900CBFB57 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		00960FA5303D901900CBFB57 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		00960FA7303D901900CBFB57 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		00960FA9303D901900CBFB57 /* EqualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerView.swift; sourceTree = "<group>"; };
 		00960F66303D901B00CBFB57 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00960F69303D901B00CBFB57 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		00960F6C303D901C00CBFB57 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -102,6 +128,19 @@
 				00960F60303D901900CBFB57 /* AppDelegate.swift */,
 				00960F62303D901900CBFB57 /* SceneDelegate.swift */,
 				00960F64303D901900CBFB57 /* ContentView.swift */,
+				00960F91303D901900CBFB57 /* MusicModels.swift */,
+				00960F93303D901900CBFB57 /* Theme.swift */,
+				00960F95303D901900CBFB57 /* CustomComponents.swift */,
+				00960F97303D901900CBFB57 /* MusicDataService.swift */,
+				00960F99303D901900CBFB57 /* AudioPlayerManager.swift */,
+				00960F9B303D901900CBFB57 /* MiniPlayerView.swift */,
+				00960F9D303D901900CBFB57 /* NowPlayingView.swift */,
+				00960F9F303D901900CBFB57 /* LyricsView.swift */,
+				00960FA1303D901900CBFB57 /* QueueView.swift */,
+				00960FA3303D901900CBFB57 /* HomeView.swift */,
+				00960FA5303D901900CBFB57 /* SearchView.swift */,
+				00960FA7303D901900CBFB57 /* LibraryView.swift */,
+				00960FA9303D901900CBFB57 /* EqualizerView.swift */,
 				00960F66303D901B00CBFB57 /* Assets.xcassets */,
 				00960F6B303D901C00CBFB57 /* LaunchScreen.storyboard */,
 				00960F6E303D901C00CBFB57 /* Info.plist */,
@@ -269,6 +308,19 @@
 				00960F61303D901900CBFB57 /* AppDelegate.swift in Sources */,
 				00960F63303D901900CBFB57 /* SceneDelegate.swift in Sources */,
 				00960F65303D901900CBFB57 /* ContentView.swift in Sources */,
+				00960F92303D901900CBFB57 /* MusicModels.swift in Sources */,
+				00960F94303D901900CBFB57 /* Theme.swift in Sources */,
+				00960F96303D901900CBFB57 /* CustomComponents.swift in Sources */,
+				00960F98303D901900CBFB57 /* MusicDataService.swift in Sources */,
+				00960F9A303D901900CBFB57 /* AudioPlayerManager.swift in Sources */,
+				00960F9C303D901900CBFB57 /* MiniPlayerView.swift in Sources */,
+				00960F9E303D901900CBFB57 /* NowPlayingView.swift in Sources */,
+				00960FA0303D901900CBFB57 /* LyricsView.swift in Sources */,
+				00960FA2303D901900CBFB57 /* QueueView.swift in Sources */,
+				00960FA4303D901900CBFB57 /* HomeView.swift in Sources */,
+				00960FA6303D901900CBFB57 /* SearchView.swift in Sources */,
+				00960FA8303D901900CBFB57 /* LibraryView.swift in Sources */,
+				00960FAA303D901900CBFB57 /* EqualizerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
