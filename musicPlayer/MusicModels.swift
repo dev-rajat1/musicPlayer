@@ -24,12 +24,13 @@ extension String {
 // MARK: - JioSaavn DES Cryptor for Direct Media Audio URLs
 class SaavnCrypto {
     static func decryptMediaURL(encrypted: String) -> String? {
-        guard let data = Data(base64Encoded: encrypted) else { return nil }
-        guard let keyData = "38346591".data(using: .utf8) else { return nil }
+        guard let data = Data(base64Encoded: encrypted),
+              let keyData = "38346591".data(using: .utf8) else { return nil }
         
         let keyLength = kCCKeySizeDES
         let dataLength = data.count
-        var result = Data(count: dataLength + kCCBlockSizeDES)
+        let bufferLength = dataLength + kCCBlockSizeDES
+        var result = Data(count: bufferLength)
         var numBytesDecrypted: Int = 0
         
         let status = result.withUnsafeMutableBytes { resultBytes in
@@ -42,7 +43,7 @@ class SaavnCrypto {
                         keyBytes.baseAddress, keyLength,
                         nil,
                         dataBytes.baseAddress, dataLength,
-                        resultBytes.baseAddress, result.count,
+                        resultBytes.baseAddress, bufferLength,
                         &numBytesDecrypted
                     )
                 }
@@ -50,7 +51,7 @@ class SaavnCrypto {
         }
         
         guard status == kCCSuccess else { return nil }
-        result.removeSubrange(numBytesDecrypted..<result.count)
+        result.removeSubrange(numBytesDecrypted..<bufferLength)
         
         if let decryptedString = String(data: result, encoding: .utf8) {
             return decryptedString

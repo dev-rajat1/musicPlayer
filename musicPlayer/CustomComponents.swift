@@ -13,14 +13,6 @@ class ImageLoader: ObservableObject {
     private var cancellable: AnyCancellable?
     private static let cache = NSCache<NSURL, UIImage>()
     
-    private static let session: URLSession = {
-        let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = 4
-        config.timeoutIntervalForResource = 8
-        config.requestCachePolicy = .returnCacheDataElseLoad
-        return URLSession(configuration: config)
-    }()
-    
     func load(from url: URL?) {
         guard let url = url else { return }
         
@@ -29,7 +21,7 @@ class ImageLoader: ObservableObject {
             return
         }
         
-        cancellable = Self.session.dataTaskPublisher(for: url)
+        cancellable = URLSession.shared.dataTaskPublisher(for: url)
             .map { UIImage(data: $0.data) }
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
@@ -37,7 +29,9 @@ class ImageLoader: ObservableObject {
                 if let downloadedImage = downloadedImage {
                     Self.cache.setObject(downloadedImage, forKey: url as NSURL)
                 }
-                self?.image = downloadedImage
+                withAnimation(Animation.easeIn(duration: 0.2)) {
+                    self?.image = downloadedImage
+                }
             }
     }
     

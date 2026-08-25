@@ -39,7 +39,7 @@ class MusicDataService: ObservableObject {
                 album: "Brahmāstra",
                 duration: 268,
                 audioURLString: "https://aac.saavncdn.com/714/be9426f30a9e7420199da2ae841bc655_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/714/Brahmastra-Hindi-2022-20220817173117-500x500.jpg",
                 genre: "Romance",
                 isFavorite: true,
                 lyrics: [
@@ -69,7 +69,7 @@ class MusicDataService: ObservableObject {
                 album: "Bhediya",
                 duration: 261,
                 audioURLString: "https://aac.saavncdn.com/131/ee595b12852e90c95a09cff98c199587_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/131/Bhediya-Hindi-2022-20221107183049-500x500.jpg",
                 genre: "Romance",
                 isFavorite: false,
                 lyrics: [
@@ -92,7 +92,7 @@ class MusicDataService: ObservableObject {
                 album: "Shershaah",
                 duration: 230,
                 audioURLString: "https://aac.saavncdn.com/393/d129fa8a29a008c2a39284224c653bc4_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/393/Shershaah-Original-Motion-Picture-Soundtrack-Hindi-2021-20210815181610-500x500.jpg",
                 genre: "Melody",
                 isFavorite: true,
                 lyrics: [
@@ -115,7 +115,7 @@ class MusicDataService: ObservableObject {
                 album: "MoonChild Era",
                 duration: 195,
                 audioURLString: "https://aac.saavncdn.com/264/3dfd8885c35ff658e4e94b8e23f99e46_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/264/MoonChild-Era-Punjabi-2021-20210822062635-500x500.jpg",
                 genre: "Punjabi Pop",
                 isFavorite: true,
                 lyrics: [
@@ -136,7 +136,7 @@ class MusicDataService: ObservableObject {
                 album: "Aashiqui 2",
                 duration: 262,
                 audioURLString: "https://aac.saavncdn.com/285/1e9389f470aa0a8523c914bf42bc261e_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/285/Aashiqui-2-Hindi-2013-500x500.jpg",
                 genre: "Romantic",
                 isFavorite: true,
                 lyrics: [
@@ -160,7 +160,7 @@ class MusicDataService: ObservableObject {
                 album: "Ae Dil Hai Mushkil",
                 duration: 289,
                 audioURLString: "https://aac.saavncdn.com/139/2e604f3ae4608fcfa2fa74ef3dca603f_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/139/Ae-Dil-Hai-Mushkil-Hindi-2016-500x500.jpg",
                 genre: "Sufi / Sad",
                 isFavorite: false,
                 lyrics: [
@@ -182,7 +182,7 @@ class MusicDataService: ObservableObject {
                 album: "War",
                 duration: 302,
                 audioURLString: "https://aac.saavncdn.com/743/2e38c9fe4d2df412030fbe8f1a141b71_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/743/War-Hindi-2019-20190927161727-500x500.jpg",
                 genre: "Dance / Party",
                 isFavorite: false,
                 lyrics: [
@@ -202,7 +202,7 @@ class MusicDataService: ObservableObject {
                 album: "Yeh Jawaani Hai Deewani",
                 duration: 228,
                 audioURLString: "https://aac.saavncdn.com/139/26cf1a1532f831ecad2a537f7a77e384_160.mp4",
-                artworkURLString: nil,
+                artworkURLString: "https://c.saavncdn.com/139/Yeh-Jawaani-Hai-Deewani-Hindi-2013-500x500.jpg",
                 genre: "Travel / Feel Good",
                 isFavorite: true,
                 lyrics: [
