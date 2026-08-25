@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import UIKit
 import AVFoundation
 import MediaPlayer
 import Combine
@@ -114,9 +115,9 @@ class AudioPlayerManager: ObservableObject {
         updateNowPlayingInfo(song: song)
         
         // Listen for track finished
-        NotificationCenter.default.removeObserver(self, name: AVPlayerItem.didPlayToEndTimeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         NotificationCenter.default.addObserver(
-            forName: AVPlayerItem.didPlayToEndTimeNotification,
+            forName: Notification.Name.AVPlayerItemDidPlayToEndTime,
             object: playerItem,
             queue: .main
         ) { [weak self] _ in

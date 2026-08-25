@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct LyricsView: View {
     @Environment(\.presentationMode) var presentationMode

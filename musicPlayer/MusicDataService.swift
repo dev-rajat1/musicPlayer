@@ -37,7 +37,7 @@ class MusicDataService: ObservableObject {
                 album: "Brahmāstra",
                 duration: 268,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Romance",
                 isFavorite: true,
                 lyrics: [
@@ -67,7 +67,7 @@ class MusicDataService: ObservableObject {
                 album: "Bhediya",
                 duration: 261,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Romance",
                 isFavorite: false,
                 lyrics: [
@@ -90,7 +90,7 @@ class MusicDataService: ObservableObject {
                 album: "Shershaah",
                 duration: 230,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Melody",
                 isFavorite: true,
                 lyrics: [
@@ -113,7 +113,7 @@ class MusicDataService: ObservableObject {
                 album: "MoonChild Era",
                 duration: 195,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Punjabi Pop",
                 isFavorite: true,
                 lyrics: [
@@ -134,7 +134,7 @@ class MusicDataService: ObservableObject {
                 album: "Aashiqui 2",
                 duration: 262,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Romantic",
                 isFavorite: true,
                 lyrics: [
@@ -158,7 +158,7 @@ class MusicDataService: ObservableObject {
                 album: "Ae Dil Hai Mushkil",
                 duration: 289,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Sufi / Sad",
                 isFavorite: false,
                 lyrics: [
@@ -180,7 +180,7 @@ class MusicDataService: ObservableObject {
                 album: "War",
                 duration: 302,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Dance / Party",
                 isFavorite: false,
                 lyrics: [
@@ -200,7 +200,7 @@ class MusicDataService: ObservableObject {
                 album: "Yeh Jawaani Hai Deewani",
                 duration: 228,
                 audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
-                artworkURLString: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=600&q=80",
+                artworkURLString: nil,
                 genre: "Travel / Feel Good",
                 isFavorite: true,
                 lyrics: [

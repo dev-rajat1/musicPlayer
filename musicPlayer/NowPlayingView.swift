@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct NowPlayingView: View {
     @Environment(\.presentationMode) var presentationMode

@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct HomeView: View {
     @ObservedObject var playerManager = AudioPlayerManager.shared

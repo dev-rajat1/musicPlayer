@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 import Combine
 
 // MARK: - Image Loader / Remote Image View
@@ -11,6 +12,14 @@ class ImageLoader: ObservableObject {
     @Published var image: UIImage?
     private var cancellable: AnyCancellable?
     private static let cache = NSCache<NSURL, UIImage>()
+    
+    private static let session: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 4
+        config.timeoutIntervalForResource = 8
+        config.requestCachePolicy = .returnCacheDataElseLoad
+        return URLSession(configuration: config)
+    }()
     
     func load(from url: URL?) {
         guard let url = url else { return }
@@ -20,7 +29,7 @@ class ImageLoader: ObservableObject {
             return
         }
         
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
+        cancellable = Self.session.dataTaskPublisher(for: url)
             .map { UIImage(data: $0.data) }
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
@@ -53,17 +62,21 @@ struct RemoteImageView: View {
                 placeholderGradient
                     .overlay(
                         Image(systemName: "music.note")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.white.opacity(0.8))
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color.white.opacity(0.85))
                     )
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         .onAppear {
-            loader.load(from: url)
+            if let url = url {
+                loader.load(from: url)
+            }
         }
         .onChange(of: url) { newUrl in
-            loader.load(from: newUrl)
+            if let newUrl = newUrl {
+                loader.load(from: newUrl)
+            }
         }
     }
 }
