@@ -10,7 +10,7 @@ import Combine
 // MARK: - Image Loader / Remote Image View
 class ImageLoader: ObservableObject {
     @Published var image: UIImage?
-    private var cancellable: AnyCancellable?
+    private var task: URLSessionDataTask?
     private static let cache = NSCache<NSURL, UIImage>()
     
     func load(from url: URL?) {
@@ -21,22 +21,26 @@ class ImageLoader: ObservableObject {
             return
         }
         
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .map { UIImage(data: $0.data) }
-            .replaceError(with: nil)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] downloadedImage in
-                if let downloadedImage = downloadedImage {
-                    Self.cache.setObject(downloadedImage, forKey: url as NSURL)
-                }
-                withAnimation(Animation.easeIn(duration: 0.2)) {
-                    self?.image = downloadedImage
+        task?.cancel()
+        var request = URLRequest(url: url)
+        request.cachePolicy = .returnCacheDataElseLoad
+        request.timeoutInterval = 20
+        request.setValue("Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15", forHTTPHeaderField: "User-Agent")
+        
+        task = URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+            guard let data = data, error == nil, let downloaded = UIImage(data: data) else { return }
+            Self.cache.setObject(downloaded, forKey: url as NSURL)
+            DispatchQueue.main.async {
+                withAnimation(Animation.easeIn(duration: 0.25)) {
+                    self?.image = downloaded
                 }
             }
+        }
+        task?.resume()
     }
     
     deinit {
-        cancellable?.cancel()
+        task?.cancel()
     }
 }
 

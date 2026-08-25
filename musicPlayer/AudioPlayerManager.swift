@@ -42,6 +42,7 @@ class AudioPlayerManager: ObservableObject {
     
     private var avPlayer: AVPlayer?
     private var timeObserverToken: Any?
+    private var statusObserver: NSKeyValueObservation?
     private var originalQueue: [Song] = []
     private var sleepTimer: Timer?
     private var cancellables = Set<AnyCancellable>()
@@ -53,6 +54,7 @@ class AudioPlayerManager: ObservableObject {
     
     deinit {
         removeTimeObserver()
+        statusObserver?.invalidate()
     }
     
     // MARK: - Audio Session Setup for Background Audio
@@ -94,9 +96,15 @@ class AudioPlayerManager: ObservableObject {
     
     private func loadAndPlay(song: Song) {
         removeTimeObserver()
+        statusObserver?.invalidate()
         
         guard let url = song.audioURL else { return }
-        let playerItem = AVPlayerItem(url: url)
+        
+        let headers: [String: String] = [
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1"
+        ]
+        let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": headers])
+        let playerItem = AVPlayerItem(asset: asset)
         
         if avPlayer == nil {
             avPlayer = AVPlayer(playerItem: playerItem)
@@ -104,12 +112,33 @@ class AudioPlayerManager: ObservableObject {
             avPlayer?.replaceCurrentItem(with: playerItem)
         }
         
-        avPlayer?.rate = playbackSpeed
+        avPlayer?.automaticallyWaitsToMinimizeStalling = false
+        avPlayer?.playImmediately(atRate: playbackSpeed)
+        avPlayer?.play()
+        
         isPlaying = true
         duration = song.duration > 0 ? song.duration : 240
         currentTime = 0
         playbackProgress = 0
         activeLyricIndex = 0
+        
+        // Observe item readiness to ensure playback starts instantly
+        statusObserver = playerItem.observe(\.status, options: [.new]) { [weak self] item, _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if item.status == .readyToPlay {
+                    self.avPlayer?.play()
+                    self.avPlayer?.rate = self.playbackSpeed
+                    self.isPlaying = true
+                    let dur = CMTimeGetSeconds(item.duration)
+                    if !dur.isNaN && dur > 0 {
+                        self.duration = dur
+                    }
+                } else if item.status == .failed {
+                    print("AVPlayerItem error: \(String(describing: item.error?.localizedDescription))")
+                }
+            }
+        }
         
         addTimeObserver()
         updateNowPlayingInfo(song: song)
@@ -332,17 +361,19 @@ class AudioPlayerManager: ObservableObject {
         }
     }
     
-    // MARK: - Lock Screen & Control Center Integration
+    // MARK: - Lockscreen MPNowPlayingInfoCenter & Remote Command Center
     private func setupRemoteCommandCenter() {
         let commandCenter = MPRemoteCommandCenter.shared()
         
         commandCenter.playCommand.addTarget { [weak self] _ in
-            self?.togglePlayPause()
+            self?.avPlayer?.play()
+            self?.isPlaying = true
             return .success
         }
         
         commandCenter.pauseCommand.addTarget { [weak self] _ in
-            self?.togglePlayPause()
+            self?.avPlayer?.pause()
+            self?.isPlaying = false
             return .success
         }
         
@@ -357,37 +388,38 @@ class AudioPlayerManager: ObservableObject {
         }
         
         commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
-            if let positionEvent = event as? MPChangePlaybackPositionCommandEvent {
-                self?.seek(toSeconds: positionEvent.positionTime)
-                return .success
-            }
-            return .commandFailed
+            guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
+            self?.seek(toSeconds: event.positionTime)
+            return .success
         }
     }
     
-    private func updateNowPlayingInfo(song: Song) {
-        var nowPlayingInfo = [String: Any]()
-        nowPlayingInfo[MPMediaItemPropertyTitle] = song.title
-        nowPlayingInfo[MPMediaItemPropertyArtist] = song.artist
-        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = song.album
-        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? playbackSpeed : 0.0
+    func updateNowPlayingInfo(song: Song) {
+        var info = [String: Any]()
+        info[MPMediaItemPropertyTitle] = song.title
+        info[MPMediaItemPropertyArtist] = song.artist
+        info[MPMediaItemPropertyAlbumTitle] = song.album
+        info[MPMediaItemPropertyPlaybackDuration] = duration
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
+        info[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? playbackSpeed : 0.0
         
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
     
-    // Formatting Helpers
+    // Helper formatted strings
     var currentTimeString: String {
-        let mins = Int(currentTime) / 60
-        let secs = Int(currentTime) % 60
-        return String(format: "%d:%02d", mins, secs)
+        formatTime(currentTime)
     }
     
     var remainingTimeString: String {
         let remaining = max(0, duration - currentTime)
-        let mins = Int(remaining) / 60
-        let secs = Int(remaining) % 60
-        return String(format: "-%d:%02d", mins, secs)
+        return "-\(formatTime(remaining))"
+    }
+    
+    private func formatTime(_ seconds: TimeInterval) -> String {
+        guard !seconds.isNaN && !seconds.isInfinite else { return "0:00" }
+        let mins = Int(seconds) / 60
+        let secs = Int(seconds) % 60
+        return String(format: "%d:%02d", mins, secs)
     }
 }
