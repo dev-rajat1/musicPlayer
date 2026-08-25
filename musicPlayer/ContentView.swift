@@ -15,8 +15,12 @@ struct ContentView: View {
     
     init() {
         // Customize UITabBar appearance for modern dark glass look
-        UITabBar.appearance().barTintColor = UIColor(red: 10/255, green: 12/255, blue: 18/255, alpha: 0.95)
-        UITabBar.appearance().backgroundColor = UIColor(red: 10/255, green: 12/255, blue: 18/255, alpha: 0.95)
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(red: 10/255, green: 12/255, blue: 18/255, alpha: 0.96)
+        
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
         UITabBar.appearance().unselectedItemTintColor = UIColor(white: 0.55, alpha: 1.0)
     }
     
@@ -54,9 +58,11 @@ struct ContentView: View {
             }
             .accentColor(AppTheme.primaryAccent)
             
-            // Floating Mini Player docked above tabs
-            MiniPlayerView()
-                .padding(.bottom, 50)
+            // Floating Mini Player docked right above tab bar
+            if playerManager.currentSong != nil {
+                MiniPlayerView()
+                    .padding(.bottom, 52)
+            }
         }
         .preferredColorScheme(.dark)
         .fullScreenCover(isPresented: $playerManager.showFullPlayer) {
