@@ -17,10 +17,10 @@ struct LyricsView: View {
             
             // Ambient subtle artwork glow
             RadialGradient(
-                colors: [
+                gradient: Gradient(colors: [
                     song.gradientColors.first?.opacity(0.4) ?? AppTheme.primaryAccent.opacity(0.3),
                     Color.clear
-                ],
+                ]),
                 center: .top,
                 startRadius: 40,
                 endRadius: 400

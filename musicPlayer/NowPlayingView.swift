@@ -22,10 +22,10 @@ struct NowPlayingView: View {
                     
                     // Ambient Gradient Orbs
                     RadialGradient(
-                        colors: [
+                        gradient: Gradient(colors: [
                             song.gradientColors.first?.opacity(0.55) ?? AppTheme.primaryAccent.opacity(0.5),
                             Color.clear
-                        ],
+                        ]),
                         center: .topLeading,
                         startRadius: 50,
                         endRadius: 380
@@ -33,10 +33,10 @@ struct NowPlayingView: View {
                     .ignoresSafeArea()
                     
                     RadialGradient(
-                        colors: [
+                        gradient: Gradient(colors: [
                             song.gradientColors.last?.opacity(0.45) ?? AppTheme.secondaryAccent.opacity(0.4),
                             Color.clear
-                        ],
+                        ]),
                         center: .bottomTrailing,
                         startRadius: 80,
                         endRadius: 420
@@ -70,7 +70,7 @@ struct NowPlayingView: View {
                                 RemoteImageView(
                                     url: song.artworkURL,
                                     placeholderGradient: LinearGradient(
-                                        colors: song.gradientColors,
+                                        gradient: Gradient(colors: song.gradientColors),
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     ),
@@ -146,7 +146,7 @@ struct NowPlayingView: View {
                         currentTimeText: playerManager.currentTimeString,
                         durationText: playerManager.remainingTimeString,
                         accentGradient: LinearGradient(
-                            colors: song.gradientColors,
+                            gradient: Gradient(colors: song.gradientColors),
                             startPoint: .leading,
                             endPoint: .trailing
                         ),
@@ -196,7 +196,7 @@ struct NowPlayingView: View {
                                 Circle()
                                     .fill(
                                         LinearGradient(
-                                            colors: song.gradientColors,
+                                            gradient: Gradient(colors: song.gradientColors),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         )

@@ -19,7 +19,7 @@ struct HomeView: View {
                 
                 // Ambient background glow
                 RadialGradient(
-                    colors: [AppTheme.primaryAccent.opacity(0.18), Color.clear],
+                    gradient: Gradient(colors: [AppTheme.primaryAccent.opacity(0.18), Color.clear]),
                     center: .topLeading,
                     startRadius: 20,
                     endRadius: 350
@@ -140,7 +140,7 @@ struct HomeView: View {
                         RemoteImageView(
                             url: song.artworkURL,
                             placeholderGradient: LinearGradient(
-                                colors: song.gradientColors,
+                                gradient: Gradient(colors: song.gradientColors),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ),
@@ -149,7 +149,7 @@ struct HomeView: View {
                         .frame(width: 310, height: 180)
                         .overlay(
                             LinearGradient(
-                                colors: [Color.clear, Color.black.opacity(0.85)],
+                                gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.85)]),
                                 startPoint: .center,
                                 endPoint: .bottom
                             )
@@ -218,7 +218,7 @@ struct HomeView: View {
                             RemoteImageView(
                                 url: song.artworkURL,
                                 placeholderGradient: LinearGradient(
-                                    colors: song.gradientColors,
+                                    gradient: Gradient(colors: song.gradientColors),
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 ),
@@ -277,7 +277,7 @@ struct HomeView: View {
                                     RemoteImageView(
                                         url: song.artworkURL,
                                         placeholderGradient: LinearGradient(
-                                            colors: song.gradientColors,
+                                            gradient: Gradient(colors: song.gradientColors),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         ),
@@ -338,7 +338,7 @@ struct HomeView: View {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(
                                         LinearGradient(
-                                            colors: playlist.coverColors,
+                                            gradient: Gradient(colors: playlist.coverColors),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         )
@@ -398,7 +398,7 @@ struct HomeView: View {
                                     Circle()
                                         .fill(
                                             LinearGradient(
-                                                colors: artist.gradientColors,
+                                                gradient: Gradient(colors: artist.gradientColors),
                                                 startPoint: .topLeading,
                                                 endPoint: .bottomTrailing
                                             )

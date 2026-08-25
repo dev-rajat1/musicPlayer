@@ -144,7 +144,7 @@ struct LibraryView: View {
                                     RemoteImageView(
                                         url: song.artworkURL,
                                         placeholderGradient: LinearGradient(
-                                            colors: song.gradientColors,
+                                            gradient: Gradient(colors: song.gradientColors),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         ),
@@ -204,7 +204,7 @@ struct LibraryView: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(
                                     LinearGradient(
-                                        colors: playlist.coverColors,
+                                        gradient: Gradient(colors: playlist.coverColors),
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
@@ -262,7 +262,7 @@ struct LibraryView: View {
                             Circle()
                                 .fill(
                                     LinearGradient(
-                                        colors: artist.gradientColors,
+                                        gradient: Gradient(colors: artist.gradientColors),
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )

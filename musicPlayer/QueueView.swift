@@ -54,7 +54,7 @@ struct QueueView: View {
                                     RemoteImageView(
                                         url: currentSong.artworkURL,
                                         placeholderGradient: LinearGradient(
-                                            colors: currentSong.gradientColors,
+                                            gradient: Gradient(colors: currentSong.gradientColors),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         ),
@@ -129,7 +129,7 @@ struct QueueView: View {
                                     Spacer()
                                 }
                             } else {
-                                ForEach(Array(playerManager.queue.enumerated()), id: \.element.id) { index, song in
+                                ForEach(Array(playerManager.queue.enumerated()), id: \.offset) { index, song in
                                     if index != playerManager.currentIndex {
                                         HStack(spacing: 12) {
                                             Text("\(index + 1)")
@@ -140,7 +140,7 @@ struct QueueView: View {
                                             RemoteImageView(
                                                 url: song.artworkURL,
                                                 placeholderGradient: LinearGradient(
-                                                    colors: song.gradientColors,
+                                                    gradient: Gradient(colors: song.gradientColors),
                                                     startPoint: .topLeading,
                                                     endPoint: .bottomTrailing
                                                 ),

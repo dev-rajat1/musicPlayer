@@ -126,7 +126,7 @@ struct SearchView: View {
                             RemoteImageView(
                                 url: song.artworkURL,
                                 placeholderGradient: LinearGradient(
-                                    colors: song.gradientColors,
+                                    gradient: Gradient(colors: song.gradientColors),
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 ),

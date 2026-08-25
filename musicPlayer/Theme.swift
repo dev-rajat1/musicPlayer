@@ -50,37 +50,37 @@ struct AppTheme {
     
     // Gradients
     static let primaryGradient = LinearGradient(
-        colors: [Color(hex: "#6366F1"), Color(hex: "#EC4899")],
+        gradient: Gradient(colors: [Color(hex: "#6366F1"), Color(hex: "#EC4899")]),
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
     
     static let neonCyanGradient = LinearGradient(
-        colors: [Color(hex: "#06B6D4"), Color(hex: "#3B82F6")],
+        gradient: Gradient(colors: [Color(hex: "#06B6D4"), Color(hex: "#3B82F6")]),
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
     
     static let sunsetGradient = LinearGradient(
-        colors: [Color(hex: "#F43F5E"), Color(hex: "#FB923C")],
+        gradient: Gradient(colors: [Color(hex: "#F43F5E"), Color(hex: "#FB923C")]),
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
     
     static let emeraldGradient = LinearGradient(
-        colors: [Color(hex: "#10B981"), Color(hex: "#06B6D4")],
+        gradient: Gradient(colors: [Color(hex: "#10B981"), Color(hex: "#06B6D4")]),
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
     
     static let purpleNightGradient = LinearGradient(
-        colors: [Color(hex: "#8B5CF6"), Color(hex: "#D946EF")],
+        gradient: Gradient(colors: [Color(hex: "#8B5CF6"), Color(hex: "#D946EF")]),
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
     
     static let darkGlassGradient = LinearGradient(
-        colors: [Color(hex: "#222A3E").opacity(0.7), Color(hex: "#121724").opacity(0.85)],
+        gradient: Gradient(colors: [Color(hex: "#222A3E").opacity(0.7), Color(hex: "#121724").opacity(0.85)]),
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )

@@ -114,9 +114,9 @@ class AudioPlayerManager: ObservableObject {
         updateNowPlayingInfo(song: song)
         
         // Listen for track finished
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        NotificationCenter.default.removeObserver(self, name: AVPlayerItem.didPlayToEndTimeNotification, object: nil)
         NotificationCenter.default.addObserver(
-            forName: .AVPlayerItemDidPlayToEndTime,
+            forName: AVPlayerItem.didPlayToEndTimeNotification,
             object: playerItem,
             queue: .main
         ) { [weak self] _ in

@@ -83,7 +83,7 @@ struct AudioVisualizerView: View {
                 RoundedRectangle(cornerRadius: 2)
                     .fill(
                         LinearGradient(
-                            colors: accentColors,
+                            gradient: Gradient(colors: accentColors),
                             startPoint: .bottom,
                             endPoint: .top
                         )
@@ -136,7 +136,7 @@ struct VinylRecordView: View {
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [Color(hex: "#1E1E24"), Color(hex: "#0A0A0C"), Color.black],
+                        gradient: Gradient(colors: [Color(hex: "#1E1E24"), Color(hex: "#0A0A0C"), Color.black]),
                         center: .center,
                         startRadius: size * 0.2,
                         endRadius: size * 0.5
@@ -173,7 +173,11 @@ struct VinylRecordView: View {
             // Center Album Artwork Label
             RemoteImageView(
                 url: song.artworkURL,
-                placeholderGradient: LinearGradient(colors: song.gradientColors, startPoint: .topLeading, endPoint: .bottomTrailing),
+                placeholderGradient: LinearGradient(
+                    gradient: Gradient(colors: song.gradientColors),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
                 cornerRadius: size * 0.175
             )
             .frame(width: size * 0.35, height: size * 0.35)

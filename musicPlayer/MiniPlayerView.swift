@@ -22,7 +22,7 @@ struct MiniPlayerView: View {
                         Rectangle()
                             .fill(
                                 LinearGradient(
-                                    colors: song.gradientColors,
+                                    gradient: Gradient(colors: song.gradientColors),
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
@@ -36,7 +36,11 @@ struct MiniPlayerView: View {
                     // Artwork with glow
                     RemoteImageView(
                         url: song.artworkURL,
-                        placeholderGradient: LinearGradient(colors: song.gradientColors, startPoint: .topLeading, endPoint: .bottomTrailing),
+                        placeholderGradient: LinearGradient(
+                            gradient: Gradient(colors: song.gradientColors),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
                         cornerRadius: 8
                     )
                     .frame(width: 46, height: 46)
@@ -77,7 +81,7 @@ struct MiniPlayerView: View {
                             Circle()
                                 .fill(
                                     LinearGradient(
-                                        colors: song.gradientColors,
+                                        gradient: Gradient(colors: song.gradientColors),
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
