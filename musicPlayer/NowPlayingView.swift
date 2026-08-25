@@ -65,7 +65,7 @@ struct NowPlayingView: View {
                                 isPlaying: playerManager.isPlaying,
                                 size: min(UIScreen.main.bounds.width - 64, 300)
                             )
-                            .transition(.scale.combined(with: .opacity))
+                            .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
                         } else {
                             VStack {
                                 RemoteImageView(
@@ -88,9 +88,9 @@ struct NowPlayingView: View {
                                     y: 12
                                 )
                                 .scaleEffect(playerManager.isPlaying ? 1.0 : 0.94)
-                                .animation(.spring(response: 0.4, dampingFraction: 0.6), value: playerManager.isPlaying)
+                                .animation(Animation.spring(response: 0.4, dampingFraction: 0.6), value: playerManager.isPlaying)
                             }
-                            .transition(.scale.combined(with: .opacity))
+                            .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
                         }
                     }
                     .frame(height: 320)
@@ -102,18 +102,18 @@ struct NowPlayingView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(song.title)
                                 .font(.system(size: 22, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .lineLimit(1)
                             
                             Text(song.artist)
                                 .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.white.opacity(0.75))
+                                .foregroundColor(Color.white.opacity(0.75))
                                 .lineLimit(1)
                             
                             if let year = song.year {
                                 Text("\(song.album) • \(year)")
                                     .font(.system(size: 12, weight: .regular))
-                                    .foregroundColor(.white.opacity(0.45))
+                                    .foregroundColor(Color.white.opacity(0.45))
                                     .lineLimit(1)
                             }
                         }
@@ -135,7 +135,7 @@ struct NowPlayingView: View {
                         }) {
                             Image(systemName: song.isFavorite ? "heart.fill" : "heart")
                                 .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(song.isFavorite ? AppTheme.secondaryAccent : .white.opacity(0.8))
+                                .foregroundColor(song.isFavorite ? AppTheme.secondaryAccent : Color.white.opacity(0.8))
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -166,7 +166,7 @@ struct NowPlayingView: View {
                         }) {
                             Image(systemName: "shuffle")
                                 .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(playerManager.isShuffled ? AppTheme.cyanAccent : .white.opacity(0.6))
+                                .foregroundColor(playerManager.isShuffled ? AppTheme.cyanAccent : Color.white.opacity(0.6))
                         }
                         
                         Spacer()
@@ -177,7 +177,7 @@ struct NowPlayingView: View {
                         }) {
                             Image(systemName: "gobackward.15")
                                 .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(.white.opacity(0.85))
+                                .foregroundColor(Color.white.opacity(0.85))
                         }
                         
                         // Previous Track
@@ -186,7 +186,7 @@ struct NowPlayingView: View {
                         }) {
                             Image(systemName: "backward.fill")
                                 .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                         }
                         
                         // Play / Pause Large Glow Button
@@ -207,7 +207,7 @@ struct NowPlayingView: View {
                                 
                                 Image(systemName: playerManager.isPlaying ? "pause.fill" : "play.fill")
                                     .font(.system(size: 30, weight: .bold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .offset(x: playerManager.isPlaying ? 0 : 2)
                             }
                         }
@@ -219,7 +219,7 @@ struct NowPlayingView: View {
                         }) {
                             Image(systemName: "forward.fill")
                                 .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                         }
                         
                         // Skip +15s
@@ -228,7 +228,7 @@ struct NowPlayingView: View {
                         }) {
                             Image(systemName: "goforward.15")
                                 .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(.white.opacity(0.85))
+                                .foregroundColor(Color.white.opacity(0.85))
                         }
                         
                         Spacer()
@@ -239,7 +239,7 @@ struct NowPlayingView: View {
                         }) {
                             Image(systemName: playerManager.repeatMode.iconName)
                                 .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(playerManager.repeatMode != .off ? AppTheme.cyanAccent : .white.opacity(0.6))
+                                .foregroundColor(playerManager.repeatMode != .off ? AppTheme.cyanAccent : Color.white.opacity(0.6))
                         }
                     }
                     .padding(.horizontal, 24)
@@ -272,7 +272,7 @@ struct NowPlayingView: View {
             }) {
                 Image(systemName: "chevron.down")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white.opacity(0.85))
+                    .foregroundColor(Color.white.opacity(0.85))
                     .frame(width: 40, height: 40)
                     .background(Color.white.opacity(0.1))
                     .clipShape(Circle())
@@ -283,25 +283,25 @@ struct NowPlayingView: View {
             VStack(spacing: 2) {
                 Text("PLAYING FROM")
                     .font(.system(size: 10, weight: .bold, design: .rounded))
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(Color.white.opacity(0.5))
                 
                 Text(song.genre.uppercased())
                     .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
             }
             
             Spacer()
             
             // Vinyl / Card Artwork View Mode Toggle
             Button(action: {
-                withAnimation(.spring()) {
+                withAnimation(Animation.spring()) {
                     playerManager.isVinylMode.toggle()
                 }
                 HapticManager.shared.selection()
             }) {
                 Image(systemName: playerManager.isVinylMode ? "square.fill" : "opticaldisc")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(playerManager.isVinylMode ? AppTheme.amberAccent : .white.opacity(0.85))
+                    .foregroundColor(playerManager.isVinylMode ? AppTheme.amberAccent : Color.white.opacity(0.85))
                     .frame(width: 40, height: 40)
                     .background(Color.white.opacity(0.1))
                     .clipShape(Circle())
@@ -329,7 +329,7 @@ struct NowPlayingView: View {
             } label: {
                 Text(String(format: "%.2fx", playerManager.playbackSpeed))
                     .font(.system(size: 13, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.85))
+                    .foregroundColor(Color.white.opacity(0.85))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
                     .background(Color.white.opacity(0.1))
@@ -352,7 +352,7 @@ struct NowPlayingView: View {
                             .font(.system(size: 12, weight: .bold))
                     }
                 }
-                .foregroundColor(playerManager.sleepTimerMinutesRemaining != nil ? AppTheme.amberAccent : .white.opacity(0.85))
+                .foregroundColor(playerManager.sleepTimerMinutesRemaining != nil ? AppTheme.amberAccent : Color.white.opacity(0.85))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(Color.white.opacity(0.1))
@@ -372,7 +372,7 @@ struct NowPlayingView: View {
                     Text("Lyrics")
                         .font(.system(size: 13, weight: .semibold))
                 }
-                .foregroundColor(.white.opacity(0.9))
+                .foregroundColor(Color.white.opacity(0.9))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
                 .background(Color.white.opacity(0.12))
@@ -386,7 +386,7 @@ struct NowPlayingView: View {
             }) {
                 Image(systemName: "list.bullet")
                     .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(.white.opacity(0.9))
+                    .foregroundColor(Color.white.opacity(0.9))
                     .frame(width: 38, height: 38)
                     .background(Color.white.opacity(0.12))
                     .clipShape(Circle())

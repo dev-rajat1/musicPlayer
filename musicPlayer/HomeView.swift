@@ -72,7 +72,7 @@ struct HomeView: View {
                 
                 Text("Music Hub")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
             }
             
             Spacer()
@@ -114,7 +114,7 @@ struct HomeView: View {
                     }) {
                         Text(genre)
                             .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(selectedGenre == genre ? .white : .white.opacity(0.6))
+                            .foregroundColor(selectedGenre == genre ? Color.white : Color.white.opacity(0.6))
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
                             .background(
@@ -166,12 +166,12 @@ struct HomeView: View {
                                 
                                 Text(song.title)
                                     .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .lineLimit(1)
                                 
                                 Text(song.artist)
                                     .font(.system(size: 13, weight: .medium))
-                                    .foregroundColor(.white.opacity(0.8))
+                                    .foregroundColor(Color.white.opacity(0.8))
                                     .lineLimit(1)
                             }
                             
@@ -189,7 +189,7 @@ struct HomeView: View {
                                     
                                     Image(systemName: (playerManager.currentSong?.id == song.id && playerManager.isPlaying) ? "pause.fill" : "play.fill")
                                         .font(.system(size: 18, weight: .bold))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color.white)
                                 }
                             }
                         }
@@ -208,7 +208,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Quick Play")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
+                .foregroundColor(Color.white)
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 ForEach(dataService.allSongs.prefix(6)) { song in
@@ -229,7 +229,7 @@ struct HomeView: View {
                             
                             Text(song.title)
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
                             
@@ -255,12 +255,14 @@ struct HomeView: View {
             HStack {
                 Text("🔥 Top Bollywood Hits")
                     .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                 
                 Spacer()
                 
                 Button("See All") {
-                    playerManager.play(song: dataService.allSongs[0], in: dataService.allSongs)
+                    if let first = dataService.allSongs.first {
+                        playerManager.play(song: first, in: dataService.allSongs)
+                    }
                 }
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(AppTheme.primaryAccent)
@@ -269,7 +271,7 @@ struct HomeView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 14) {
-                    ForEach(Array(dataService.allSongs.enumerated()), id: \.element.id) { index, song in
+                    ForEach(Array(dataService.allSongs.enumerated()), id: \.offset) { index, song in
                         Button(action: {
                             playerManager.play(song: song, in: dataService.allSongs)
                         }) {
@@ -290,7 +292,7 @@ struct HomeView: View {
                                     // Rank Badge
                                     Text("#\(index + 1)")
                                         .font(.system(size: 11, weight: .heavy))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color.white)
                                         .padding(.horizontal, 7)
                                         .padding(.vertical, 3)
                                         .background(Color.black.opacity(0.7))
@@ -300,12 +302,12 @@ struct HomeView: View {
                                 
                                 Text(song.title)
                                     .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .lineLimit(1)
                                 
                                 Text(song.artist)
                                     .font(.system(size: 12, weight: .regular))
-                                    .foregroundColor(.white.opacity(0.6))
+                                    .foregroundColor(Color.white.opacity(0.6))
                                     .lineLimit(1)
                             }
                             .frame(width: 140)
@@ -323,7 +325,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Featured Playlists")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
+                .foregroundColor(Color.white)
                 .padding(.horizontal, 20)
             
             ScrollView(.horizontal, showsIndicators: false) {
@@ -337,34 +339,34 @@ struct HomeView: View {
                         }) {
                             VStack(alignment: .leading, spacing: 8) {
                                 RoundedRectangle(cornerRadius: 16)
-                                    .fill(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: playlist.coverColors),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: playlist.coverColors),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
                                     )
-                                    .frame(width: 150, height: 150)
-                                    .overlay(
-                                        VStack {
-                                            Image(systemName: "music.note.list")
-                                                .font(.system(size: 32))
-                                                .foregroundColor(.white.opacity(0.9))
-                                            Text("\(playlist.songIds.count) Songs")
-                                                .font(.system(size: 11, weight: .bold))
-                                                .foregroundColor(.white.opacity(0.8))
-                                        }
-                                    )
-                                    .shadow(color: playlist.coverColors.first?.opacity(0.4) ?? Color.clear, radius: 10, x: 0, y: 5)
+                                )
+                                .frame(width: 150, height: 150)
+                                .overlay(
+                                    VStack {
+                                        Image(systemName: "music.note.list")
+                                            .font(.system(size: 32))
+                                            .foregroundColor(Color.white.opacity(0.9))
+                                        Text("\(playlist.songIds.count) Songs")
+                                            .font(.system(size: 11, weight: .bold))
+                                            .foregroundColor(Color.white.opacity(0.8))
+                                    }
+                                )
+                                .shadow(color: playlist.coverColors.first?.opacity(0.4) ?? Color.clear, radius: 10, x: 0, y: 5)
                                 
                                 Text(playlist.name)
                                     .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .lineLimit(1)
                                 
                                 Text(playlist.description)
                                     .font(.system(size: 11))
-                                    .foregroundColor(.white.opacity(0.6))
+                                    .foregroundColor(Color.white.opacity(0.6))
                                     .lineLimit(2)
                             }
                             .frame(width: 150)
@@ -382,7 +384,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Popular Artists")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
+                .foregroundColor(Color.white)
                 .padding(.horizontal, 20)
             
             ScrollView(.horizontal, showsIndicators: false) {
@@ -408,18 +410,18 @@ struct HomeView: View {
                                     
                                     Image(systemName: "person.fill")
                                         .font(.system(size: 32))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color.white)
                                 }
                                 .shadow(color: artist.gradientColors.first?.opacity(0.4) ?? Color.clear, radius: 8, x: 0, y: 4)
                                 
                                 Text(artist.name)
                                     .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .lineLimit(1)
                                 
                                 Text(artist.monthlyListeners)
                                     .font(.system(size: 10))
-                                    .foregroundColor(.white.opacity(0.5))
+                                    .foregroundColor(Color.white.opacity(0.5))
                                     .lineLimit(1)
                             }
                             .frame(width: 90)

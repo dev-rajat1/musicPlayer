@@ -51,12 +51,12 @@ struct MiniPlayerView: View {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(song.title)
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .lineLimit(1)
                         
                         Text(song.artist)
                             .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(.white.opacity(0.7))
+                            .foregroundColor(Color.white.opacity(0.7))
                             .lineLimit(1)
                     }
                     
@@ -69,7 +69,7 @@ struct MiniPlayerView: View {
                     }) {
                         Image(systemName: song.isFavorite ? "heart.fill" : "heart")
                             .font(.system(size: 18))
-                            .foregroundColor(song.isFavorite ? AppTheme.secondaryAccent : .white.opacity(0.7))
+                            .foregroundColor(song.isFavorite ? AppTheme.secondaryAccent : Color.white.opacity(0.7))
                     }
                     .buttonStyle(PlainButtonStyle())
                     .padding(.trailing, 4)
@@ -91,7 +91,7 @@ struct MiniPlayerView: View {
                             
                             Image(systemName: playerManager.isPlaying ? "pause.fill" : "play.fill")
                                 .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .offset(x: playerManager.isPlaying ? 0 : 1)
                         }
                     }
@@ -103,7 +103,7 @@ struct MiniPlayerView: View {
                     }) {
                         Image(systemName: "forward.fill")
                             .font(.system(size: 18))
-                            .foregroundColor(.white.opacity(0.85))
+                            .foregroundColor(Color.white.opacity(0.85))
                     }
                     .buttonStyle(PlainButtonStyle())
                     .padding(.trailing, 4)
@@ -139,7 +139,7 @@ struct MiniPlayerView: View {
                         }
                     }
             )
-            .transition(.move(edge: .bottom).combined(with: .opacity))
+            .transition(AnyTransition.move(edge: Edge.bottom).combined(with: AnyTransition.opacity))
         }
     }
 }

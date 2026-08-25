@@ -20,11 +20,11 @@ struct QueueView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Up Next Queue")
                             .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                         
                         Text("\(playerManager.queue.count) tracks in queue")
                             .font(.system(size: 13))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(Color.white.opacity(0.6))
                     }
                     
                     Spacer()
@@ -34,7 +34,7 @@ struct QueueView: View {
                     }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 26))
-                            .foregroundColor(.white.opacity(0.7))
+                            .foregroundColor(Color.white.opacity(0.7))
                     }
                 }
                 .padding(.horizontal, 24)
@@ -66,12 +66,12 @@ struct QueueView: View {
                                     VStack(alignment: .leading, spacing: 3) {
                                         Text(currentSong.title)
                                             .font(.system(size: 15, weight: .semibold))
-                                            .foregroundColor(.white)
+                                            .foregroundColor(Color.white)
                                             .lineLimit(1)
                                         
                                         Text(currentSong.artist)
                                             .font(.system(size: 13))
-                                            .foregroundColor(.white.opacity(0.7))
+                                            .foregroundColor(Color.white.opacity(0.7))
                                             .lineLimit(1)
                                     }
                                     
@@ -95,7 +95,7 @@ struct QueueView: View {
                             HStack {
                                 Text("UPCOMING TRACKS")
                                     .font(.system(size: 11, weight: .bold))
-                                    .foregroundColor(.white.opacity(0.5))
+                                    .foregroundColor(Color.white.opacity(0.5))
                                 
                                 Spacer()
                                 
@@ -121,10 +121,10 @@ struct QueueView: View {
                                     VStack(spacing: 8) {
                                         Image(systemName: "music.note.list")
                                             .font(.system(size: 32))
-                                            .foregroundColor(.white.opacity(0.3))
+                                            .foregroundColor(Color.white.opacity(0.3))
                                         Text("No upcoming songs in queue.")
                                             .font(.system(size: 14))
-                                            .foregroundColor(.white.opacity(0.5))
+                                            .foregroundColor(Color.white.opacity(0.5))
                                     }
                                     .padding(.vertical, 40)
                                     Spacer()
@@ -135,7 +135,7 @@ struct QueueView: View {
                                         HStack(spacing: 12) {
                                             Text("\(index + 1)")
                                                 .font(.system(size: 13, weight: .bold, design: .monospaced))
-                                                .foregroundColor(.white.opacity(0.4))
+                                                .foregroundColor(Color.white.opacity(0.4))
                                                 .frame(width: 24)
                                             
                                             RemoteImageView(
@@ -152,12 +152,12 @@ struct QueueView: View {
                                             VStack(alignment: .leading, spacing: 3) {
                                                 Text(song.title)
                                                     .font(.system(size: 14, weight: .medium))
-                                                    .foregroundColor(.white)
+                                                    .foregroundColor(Color.white)
                                                     .lineLimit(1)
                                                 
                                                 Text(song.artist)
                                                     .font(.system(size: 12))
-                                                    .foregroundColor(.white.opacity(0.6))
+                                                    .foregroundColor(Color.white.opacity(0.6))
                                                     .lineLimit(1)
                                             }
                                             
@@ -168,7 +168,7 @@ struct QueueView: View {
                                             }) {
                                                 Image(systemName: "minus.circle")
                                                     .font(.system(size: 18))
-                                                    .foregroundColor(.white.opacity(0.5))
+                                                    .foregroundColor(Color.white.opacity(0.5))
                                             }
                                         }
                                         .padding(.horizontal, 16)

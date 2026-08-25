@@ -28,7 +28,7 @@ struct EqualizerView: View {
                                 
                                 Text("Sound Master")
                                     .font(.system(size: 28, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                             }
                             Spacer()
                         }
@@ -73,7 +73,7 @@ struct EqualizerView: View {
                         .frame(width: 8, height: 8)
                     Text(playerManager.isPlaying ? "LIVE AUDIO SPECTRUM" : "AUDIO PAUSED")
                         .font(.system(size: 11, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(Color.white.opacity(0.8))
                 }
                 
                 Spacer()
@@ -105,7 +105,7 @@ struct EqualizerView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Presets")
                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
+                .foregroundColor(Color.white)
                 .padding(.horizontal, 20)
             
             ScrollView(.horizontal, showsIndicators: false) {
@@ -124,7 +124,7 @@ struct EqualizerView: View {
                                 Text(preset.name)
                                     .font(.system(size: 13, weight: .semibold))
                             }
-                            .foregroundColor(isSelected ? .white : .white.opacity(0.65))
+                            .foregroundColor(isSelected ? Color.white : Color.white.opacity(0.65))
                             .padding(.horizontal, 14)
                             .padding(.vertical, 10)
                             .background(
@@ -145,7 +145,7 @@ struct EqualizerView: View {
             HStack {
                 Text("Manual 5-Band Frequency (dB)")
                     .font(.system(size: 15, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                 
                 Spacer()
                 
@@ -162,7 +162,7 @@ struct EqualizerView: View {
                     VStack(spacing: 10) {
                         Text("\(Int(bandGains[index]))")
                             .font(.system(size: 11, weight: .bold, design: .monospaced))
-                            .foregroundColor(bandGains[index] > 0 ? AppTheme.cyanAccent : (bandGains[index] < 0 ? AppTheme.secondaryAccent : .white.opacity(0.6)))
+                            .foregroundColor(bandGains[index] > 0 ? AppTheme.cyanAccent : (bandGains[index] < 0 ? AppTheme.secondaryAccent : Color.white.opacity(0.6)))
                         
                         // Custom Vertical Slider
                         GeometryReader { geo in
@@ -191,7 +191,7 @@ struct EqualizerView: View {
                         
                         Text(bandLabels[index])
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(.white.opacity(0.5))
+                            .foregroundColor(Color.white.opacity(0.5))
                             .multilineTextAlignment(.center)
                     }
                 }
@@ -212,17 +212,17 @@ struct EqualizerView: View {
                             .fill(AppTheme.primaryGradient)
                             .frame(width: 36, height: 36)
                         Image(systemName: "waveform.path.badge.plus")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .font(.system(size: 16))
                     }
                     
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Dynamic Bass Boost")
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                         Text("Enhances low frequencies & deep beats")
                             .font(.system(size: 11))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(Color.white.opacity(0.6))
                     }
                 }
             }
@@ -238,17 +238,17 @@ struct EqualizerView: View {
                             .fill(AppTheme.neonCyanGradient)
                             .frame(width: 36, height: 36)
                         Image(systemName: "headphones")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .font(.system(size: 16))
                     }
                     
                     VStack(alignment: .leading, spacing: 2) {
                         Text("3D Spatial Sound Stage")
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                         Text("Immersive 360° concert hall simulation")
                             .font(.system(size: 11))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(Color.white.opacity(0.6))
                     }
                 }
             }
@@ -265,7 +265,7 @@ struct EqualizerView: View {
             HStack {
                 Text("Sleep Timer")
                     .font(.system(size: 15, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                 
                 Spacer()
                 
@@ -286,7 +286,7 @@ struct EqualizerView: View {
                     }) {
                         Text(minutes == nil ? "Off" : "\(minutes!)m")
                             .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(isSelected ? .white : .white.opacity(0.7))
+                            .foregroundColor(isSelected ? Color.white : Color.white.opacity(0.7))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
                             .background(isSelected ? AppTheme.amberAccent : Color.white.opacity(0.08))

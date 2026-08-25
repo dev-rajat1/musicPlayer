@@ -32,7 +32,7 @@ struct LibraryView: View {
                     HStack {
                         Text("Your Library")
                             .font(.system(size: 28, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                         
                         Spacer()
                         
@@ -91,11 +91,11 @@ struct LibraryView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Liked Bollywood Songs")
                                 .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                             
                             Text("\(favoriteSongs.count) songs saved")
                                 .font(.system(size: 13))
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(Color.white.opacity(0.8))
                         }
                         
                         Spacer()
@@ -129,10 +129,10 @@ struct LibraryView: View {
                     VStack(spacing: 8) {
                         Image(systemName: "heart.slash")
                             .font(.system(size: 36))
-                            .foregroundColor(.white.opacity(0.3))
+                            .foregroundColor(Color.white.opacity(0.3))
                         Text("No liked songs yet.")
                             .font(.system(size: 14))
-                            .foregroundColor(.white.opacity(0.5))
+                            .foregroundColor(Color.white.opacity(0.5))
                     }
                     .padding(.top, 40)
                 } else {
@@ -156,12 +156,12 @@ struct LibraryView: View {
                                     VStack(alignment: .leading, spacing: 3) {
                                         Text(song.title)
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(playerManager.currentSong?.id == song.id ? AppTheme.cyanAccent : .white)
+                                            .foregroundColor(playerManager.currentSong?.id == song.id ? AppTheme.cyanAccent : Color.white)
                                             .lineLimit(1)
                                         
                                         Text(song.artist)
                                             .font(.system(size: 12))
-                                            .foregroundColor(.white.opacity(0.6))
+                                            .foregroundColor(Color.white.opacity(0.6))
                                             .lineLimit(1)
                                     }
                                     
@@ -213,19 +213,19 @@ struct LibraryView: View {
                                 .frame(width: 56, height: 56)
                                 .overlay(
                                     Image(systemName: "music.note.list")
-                                        .foregroundColor(.white.opacity(0.9))
+                                        .foregroundColor(Color.white.opacity(0.9))
                                         .font(.system(size: 20))
                                 )
                             
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(playlist.name)
                                     .font(.system(size: 15, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .lineLimit(1)
                                 
                                 Text("\(playlist.songIds.count) songs • \(playlist.isCustom ? "Custom" : "Curated")")
                                     .font(.system(size: 12))
-                                    .foregroundColor(.white.opacity(0.6))
+                                    .foregroundColor(Color.white.opacity(0.6))
                             }
                             
                             Spacer()
@@ -271,25 +271,25 @@ struct LibraryView: View {
                                 .frame(width: 54, height: 54)
                                 .overlay(
                                     Image(systemName: "person.fill")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color.white)
                                         .font(.system(size: 22))
                                 )
                             
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(artist.name)
                                     .font(.system(size: 15, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                 
                                 Text(artist.monthlyListeners)
                                     .font(.system(size: 12))
-                                    .foregroundColor(.white.opacity(0.6))
+                                    .foregroundColor(Color.white.opacity(0.6))
                             }
                             
                             Spacer()
                             
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.white.opacity(0.4))
+                                .foregroundColor(Color.white.opacity(0.4))
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 10)
@@ -314,7 +314,7 @@ struct LibraryView: View {
                 HStack {
                     Text("New Playlist")
                         .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                     
                     Spacer()
                     
@@ -323,7 +323,7 @@ struct LibraryView: View {
                     }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 24))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(Color.white.opacity(0.6))
                     }
                 }
                 
@@ -331,7 +331,7 @@ struct LibraryView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Cover Theme Color")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(Color.white.opacity(0.7))
                     
                     HStack(spacing: 12) {
                         ForEach(colorOptions, id: \.self) { hex in
@@ -356,14 +356,14 @@ struct LibraryView: View {
                     .padding(14)
                     .background(Color.white.opacity(0.08))
                     .cornerRadius(12)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                 
                 // Description Field
                 TextField("Description (optional)", text: $newPlaylistDesc)
                     .padding(14)
                     .background(Color.white.opacity(0.08))
                     .cornerRadius(12)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                 
                 Spacer()
                 
@@ -383,7 +383,7 @@ struct LibraryView: View {
                 }) {
                     Text("Create Playlist")
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
                         .background(AppTheme.primaryGradient)

@@ -105,7 +105,7 @@ struct AudioVisualizerView: View {
                         width: 3.5,
                         height: isPlaying ? (barHeights.indices.contains(index) ? barHeights[index] : 8) : 4
                     )
-                    .animation(.easeInOut(duration: 0.12), value: barHeights)
+                    .animation(Animation.easeInOut(duration: 0.12), value: barHeights)
             }
         }
         .frame(height: 36)
@@ -292,13 +292,13 @@ struct CustomScrubberSlider: View {
             HStack {
                 Text(currentTimeText)
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(Color.white.opacity(0.6))
                 
                 Spacer()
                 
                 Text(durationText)
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(Color.white.opacity(0.6))
             }
         }
     }
@@ -316,11 +316,11 @@ struct HeartBurstButton: View {
             isFavorite.toggle()
             HapticManager.shared.impact(.medium)
             
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.4, blendDuration: 0)) {
+            withAnimation(Animation.spring(response: 0.3, dampingFraction: 0.4, blendDuration: 0)) {
                 scale = 1.4
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                withAnimation(Animation.spring(response: 0.3, dampingFraction: 0.6)) {
                     scale = 1.0
                 }
             }
@@ -328,7 +328,7 @@ struct HeartBurstButton: View {
         }) {
             Image(systemName: isFavorite ? "heart.fill" : "heart")
                 .font(.system(size: 22, weight: .bold))
-                .foregroundColor(isFavorite ? AppTheme.secondaryAccent : .white.opacity(0.8))
+                .foregroundColor(isFavorite ? AppTheme.secondaryAccent : Color.white.opacity(0.8))
                 .scaleEffect(scale)
         }
         .buttonStyle(PlainButtonStyle())

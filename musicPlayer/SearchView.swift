@@ -32,7 +32,7 @@ struct SearchView: View {
                     HStack {
                         Text("Search")
                             .font(.system(size: 28, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                         Spacer()
                     }
                     .padding(.horizontal, 20)
@@ -42,11 +42,11 @@ struct SearchView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(Color.white.opacity(0.6))
                         
                         TextField("Search Bollywood songs, artists, lyrics...", text: $searchText)
                             .font(.system(size: 15))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .onChange(of: searchText) { newValue in
                                 dataService.searchSongs(query: newValue)
                             }
@@ -57,7 +57,7 @@ struct SearchView: View {
                                 dataService.searchResults = []
                             }) {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.white.opacity(0.6))
+                                    .foregroundColor(Color.white.opacity(0.6))
                             }
                         }
                     }
@@ -80,7 +80,7 @@ struct SearchView: View {
                                 .scaleEffect(1.2)
                             Text("Searching Bollywood music...")
                                 .font(.system(size: 14))
-                                .foregroundColor(.white.opacity(0.6))
+                                .foregroundColor(Color.white.opacity(0.6))
                         }
                         Spacer()
                     } else if !searchText.isEmpty {
@@ -90,10 +90,10 @@ struct SearchView: View {
                             VStack(spacing: 8) {
                                 Image(systemName: "music.note.list")
                                     .font(.system(size: 40))
-                                    .foregroundColor(.white.opacity(0.3))
+                                    .foregroundColor(Color.white.opacity(0.3))
                                 Text("No tracks found for \"\(searchText)\"")
                                     .font(.system(size: 15))
-                                    .foregroundColor(.white.opacity(0.6))
+                                    .foregroundColor(Color.white.opacity(0.6))
                             }
                             Spacer()
                         } else {
@@ -138,12 +138,12 @@ struct SearchView: View {
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(song.title)
                                     .font(.system(size: 15, weight: .semibold))
-                                    .foregroundColor(playerManager.currentSong?.id == song.id ? AppTheme.cyanAccent : .white)
+                                    .foregroundColor(playerManager.currentSong?.id == song.id ? AppTheme.cyanAccent : Color.white)
                                     .lineLimit(1)
                                 
                                 Text(song.artist)
                                     .font(.system(size: 12))
-                                    .foregroundColor(.white.opacity(0.65))
+                                    .foregroundColor(Color.white.opacity(0.65))
                                     .lineLimit(1)
                             }
                             
@@ -160,7 +160,7 @@ struct SearchView: View {
                             
                             Text(song.formattedDuration)
                                 .font(.system(size: 12, weight: .medium, design: .monospaced))
-                                .foregroundColor(.white.opacity(0.4))
+                                .foregroundColor(Color.white.opacity(0.4))
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
@@ -185,7 +185,7 @@ struct SearchView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Recent Searches")
                             .font(.system(size: 15, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .padding(.horizontal, 20)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -201,7 +201,7 @@ struct SearchView: View {
                                             Text(search)
                                                 .font(.system(size: 13, weight: .medium))
                                         }
-                                        .foregroundColor(.white.opacity(0.85))
+                                        .foregroundColor(Color.white.opacity(0.85))
                                         .padding(.horizontal, 14)
                                         .padding(.vertical, 8)
                                         .background(Color.white.opacity(0.08))
@@ -218,7 +218,7 @@ struct SearchView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Explore Genres & Moods")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                         .padding(.horizontal, 20)
                     
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -235,7 +235,7 @@ struct SearchView: View {
                                     HStack {
                                         Text(item.title)
                                             .font(.system(size: 14, weight: .bold))
-                                            .foregroundColor(.white)
+                                            .foregroundColor(Color.white)
                                             .multilineTextAlignment(.leading)
                                             .padding(12)
                                         
@@ -243,7 +243,7 @@ struct SearchView: View {
                                         
                                         Image(systemName: item.icon)
                                             .font(.system(size: 26))
-                                            .foregroundColor(.white.opacity(0.3))
+                                            .foregroundColor(Color.white.opacity(0.3))
                                             .padding(12)
                                     }
                                 }
