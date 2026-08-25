@@ -21,7 +21,7 @@ extension String {
     }
 }
 
-// MARK: - JioSaavn DES Cryptor for Direct Media Audio URLs
+// MARK: - JioSaavn DES Cryptor for FULL Master Audio URLs (3-6 Minutes Complete Songs)
 class SaavnCrypto {
     static func decryptMediaURL(encrypted: String) -> String? {
         guard let data = Data(base64Encoded: encrypted),
@@ -176,8 +176,9 @@ struct EqualizerPreset: Identifiable, Hashable {
     ]
 }
 
-// MARK: - Direct JioSaavn API Models
+// MARK: - Full Song JioSaavn API Models
 struct DirectSaavnResponse: Codable {
+    let total: Int?
     let results: [DirectSaavnSong]?
 }
 
@@ -185,15 +186,10 @@ struct DirectSaavnSong: Codable {
     let id: String
     let song: String?
     let title: String?
-    let singers: String?
-    let primary_artists: String?
+    let subtitle: String?
     let image: String?
-    let duration: String?
     let year: String?
-    let media_preview_url: String?
-    let encrypted_media_url: String?
-    let album: String?
-    let language: String?
+    let more_info: DirectSaavnMoreInfo?
     
     var resolvedTitle: String {
         let raw = (song ?? title ?? "Bollywood Song")
@@ -201,8 +197,24 @@ struct DirectSaavnSong: Codable {
     }
     
     var resolvedArtist: String {
-        let raw = (singers ?? primary_artists ?? "Bollywood Artist")
-        return raw.decodingHTMLEntities()
+        if let more = more_info, let artistMap = more.artistMap, let primary = artistMap.primary_artists, !primary.isEmpty {
+            return primary.compactMap { $0.name }.joined(separator: ", ").decodingHTMLEntities()
+        }
+        if let sub = subtitle, !sub.isEmpty {
+            return sub.components(separatedBy: " - ").first?.decodingHTMLEntities() ?? sub.decodingHTMLEntities()
+        }
+        return "Bollywood Artist"
+    }
+    
+    var albumName: String {
+        more_info?.album?.decodingHTMLEntities() ?? "Bollywood Hit"
+    }
+    
+    var durationSeconds: TimeInterval {
+        if let dStr = more_info?.duration, let sec = Double(dStr), sec > 0 {
+            return sec
+        }
+        return 240
     }
     
     var bestImageURL: String? {
@@ -212,74 +224,26 @@ struct DirectSaavnSong: Codable {
     }
     
     var streamURL: String? {
-        if let encrypted = encrypted_media_url, !encrypted.isEmpty,
+        if let encrypted = more_info?.encrypted_media_url, !encrypted.isEmpty,
            let decrypted = SaavnCrypto.decryptMediaURL(encrypted: encrypted), !decrypted.isEmpty {
             return decrypted
         }
-        
-        if let preview = media_preview_url, !preview.isEmpty {
-            let full = preview.replacingOccurrences(of: "_preview.mp4", with: "_160.mp4")
-                              .replacingOccurrences(of: "http://", with: "https://")
-            return full
-        }
-        
         return nil
     }
 }
 
-// MARK: - iTunes Apple Music API Models (Reliable 100% Free CDN Audio & HD Artwork)
-struct ITunesSearchResponse: Codable {
-    let resultCount: Int
-    let results: [ITunesSong]
+struct DirectSaavnMoreInfo: Codable {
+    let album: String?
+    let duration: String?
+    let encrypted_media_url: String?
+    let artistMap: DirectSaavnArtistMap?
 }
 
-struct ITunesSong: Codable {
-    let trackId: Int?
-    let trackName: String?
-    let artistName: String?
-    let collectionName: String?
-    let previewUrl: String?
-    let artworkUrl100: String?
-    let primaryGenreName: String?
-    let trackTimeMillis: Int?
-    let releaseDate: String?
-    
-    var resolvedDuration: TimeInterval {
-        if let millis = trackTimeMillis {
-            return TimeInterval(millis / 1000)
-        }
-        return 210
-    }
-    
-    var highResArtwork: String? {
-        guard let raw = artworkUrl100 else { return nil }
-        return raw.replacingOccurrences(of: "100x100bb.jpg", with: "600x600bb.jpg")
-                  .replacingOccurrences(of: "100x100bb.png", with: "600x600bb.png")
-    }
-    
-    var toSong: Song? {
-        guard let preview = previewUrl, !preview.isEmpty else { return nil }
-        let idString = trackId != nil ? String(trackId!) : UUID().uuidString
-        let yearStr = releaseDate != nil ? String(releaseDate!.prefix(4)) : "2023"
-        
-        return Song(
-            id: "itunes-\(idString)",
-            title: trackName ?? "Bollywood Song",
-            artist: artistName ?? "Bollywood Artist",
-            album: collectionName ?? "Bollywood Hit",
-            duration: resolvedDuration,
-            audioURLString: preview,
-            artworkURLString: highResArtwork,
-            genre: primaryGenreName ?? "Bollywood",
-            isFavorite: false,
-            lyrics: [
-                LyricLine(time: 0, text: "♪ \(trackName ?? "Now Playing") ♪"),
-                LyricLine(time: 8, text: "Artist: \(artistName ?? "Unknown")"),
-                LyricLine(time: 18, text: "Album: \(collectionName ?? "Bollywood")")
-            ],
-            year: yearStr,
-            plays: Int.random(in: 500000...4500000),
-            gradientHexes: ["#FF4E50", "#6366F1"]
-        )
-    }
+struct DirectSaavnArtistMap: Codable {
+    let primary_artists: [DirectSaavnArtistInfo]?
+}
+
+struct DirectSaavnArtistInfo: Codable {
+    let id: String?
+    let name: String?
 }
