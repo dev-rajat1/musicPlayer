@@ -5,6 +5,61 @@
 
 import Foundation
 import SwiftUI
+import CommonCrypto
+
+// MARK: - HTML Entity Decoder Extension
+extension String {
+    func decodingHTMLEntities() -> String {
+        return self
+            .replacingOccurrences(of: "&quot;", with: "\"")
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&#039;", with: "'")
+            .replacingOccurrences(of: "&apos;", with: "'")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
+            .replacingOccurrences(of: "&nbsp;", with: " ")
+    }
+}
+
+// MARK: - JioSaavn DES Cryptor for Direct Media Audio URLs
+class SaavnCrypto {
+    static func decryptMediaURL(encrypted: String) -> String? {
+        guard let data = Data(base64Encoded: encrypted) else { return nil }
+        guard let keyData = "38346591".data(using: .utf8) else { return nil }
+        
+        let keyLength = kCCKeySizeDES
+        let dataLength = data.count
+        var result = Data(count: dataLength + kCCBlockSizeDES)
+        var numBytesDecrypted: Int = 0
+        
+        let status = result.withUnsafeMutableBytes { resultBytes in
+            data.withUnsafeBytes { dataBytes in
+                keyData.withUnsafeBytes { keyBytes in
+                    CCCrypt(
+                        CCOperation(kCCDecrypt),
+                        CCAlgorithm(kCCAlgorithmDES),
+                        CCOptions(kCCOptionECBMode | kCCOptionPKCS7Padding),
+                        keyBytes.baseAddress, keyLength,
+                        nil,
+                        dataBytes.baseAddress, dataLength,
+                        resultBytes.baseAddress, result.count,
+                        &numBytesDecrypted
+                    )
+                }
+            }
+        }
+        
+        guard status == kCCSuccess else { return nil }
+        result.removeSubrange(numBytesDecrypted..<result.count)
+        
+        if let decryptedString = String(data: result, encoding: .utf8) {
+            return decryptedString
+                .replacingOccurrences(of: "_96.mp4", with: "_160.mp4")
+                .replacingOccurrences(of: "http://", with: "https://")
+        }
+        return nil
+    }
+}
 
 // MARK: - Repeat Mode
 enum RepeatMode: String, CaseIterable, Identifiable {
@@ -41,8 +96,8 @@ struct Song: Identifiable, Codable, Equatable {
     let artist: String
     let album: String
     let duration: TimeInterval
-    let audioURLString: String
-    let artworkURLString: String?
+    var audioURLString: String
+    var artworkURLString: String?
     let genre: String
     var isFavorite: Bool
     var lyrics: [LyricLine]
@@ -120,75 +175,53 @@ struct EqualizerPreset: Identifiable, Hashable {
     ]
 }
 
-// MARK: - JioSaavn / Online API Response Decodables
-struct JioSaavnSearchResponse: Codable {
-    let status: String?
-    let message: String?
-    let data: JioSaavnSearchData?
+// MARK: - Direct JioSaavn API Models
+struct DirectSaavnResponse: Codable {
+    let results: [DirectSaavnSong]?
 }
 
-struct JioSaavnSearchData: Codable {
-    let total: Int?
-    let start: Int?
-    let results: [JioSaavnSongItem]?
-}
-
-struct JioSaavnSongItem: Codable {
+struct DirectSaavnSong: Codable {
     let id: String
-    let name: String?
+    let song: String?
     let title: String?
-    let type: String?
-    let year: String?
+    let singers: String?
+    let primary_artists: String?
+    let image: String?
     let duration: String?
-    let label: String?
-    let primaryArtists: String?
-    let artists: [JioSaavnArtistItem]?
-    let featuredArtists: String?
+    let year: String?
+    let media_preview_url: String?
+    let encrypted_media_url: String?
+    let album: String?
     let language: String?
-    let hasLyrics: String?
-    let url: String?
-    let copyright: String?
-    let image: [JioSaavnMediaLink]?
-    let downloadUrl: [JioSaavnMediaLink]?
-    let album: JioSaavnAlbumItem?
     
     var resolvedTitle: String {
-        name ?? title ?? "Unknown Song"
+        let raw = (song ?? title ?? "Bollywood Song")
+        return raw.decodingHTMLEntities()
     }
     
     var resolvedArtist: String {
-        if let primaryArtists = primaryArtists, !primaryArtists.isEmpty {
-            return primaryArtists
-        }
-        if let artists = artists, !artists.isEmpty {
-            return artists.compactMap { $0.name }.joined(separator: ", ")
-        }
-        return "Various Artists"
+        let raw = (singers ?? primary_artists ?? "Bollywood Artist")
+        return raw.decodingHTMLEntities()
     }
     
     var bestImageURL: String? {
-        image?.last?.url ?? image?.first?.url
+        guard let img = image else { return nil }
+        return img.replacingOccurrences(of: "150x150", with: "500x500")
+                  .replacingOccurrences(of: "http://", with: "https://")
     }
     
-    var bestDownloadURL: String? {
-        downloadUrl?.last?.url ?? downloadUrl?.first?.url
+    var streamURL: String? {
+        if let encrypted = encrypted_media_url, !encrypted.isEmpty,
+           let decrypted = SaavnCrypto.decryptMediaURL(encrypted: encrypted), !decrypted.isEmpty {
+            return decrypted
+        }
+        
+        if let preview = media_preview_url, !preview.isEmpty {
+            let full = preview.replacingOccurrences(of: "_preview.mp4", with: "_160.mp4")
+                              .replacingOccurrences(of: "http://", with: "https://")
+            return full
+        }
+        
+        return nil
     }
-}
-
-struct JioSaavnArtistItem: Codable {
-    let id: String?
-    let name: String?
-    let role: String?
-}
-
-struct JioSaavnAlbumItem: Codable {
-    let id: String?
-    let name: String?
-    let url: String?
-}
-
-struct JioSaavnMediaLink: Codable {
-    let quality: String?
-    let url: String?
-    let link: String?
 }

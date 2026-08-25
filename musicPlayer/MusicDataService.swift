@@ -19,16 +19,18 @@ class MusicDataService: ObservableObject {
     
     private let favoritesKey = "saved_favorite_song_ids"
     private let customPlaylistsKey = "saved_custom_playlists"
+    private var cancellables = Set<AnyCancellable>()
     
     init() {
         loadInitialCatalog()
         loadSavedFavorites()
         loadSavedPlaylists()
+        fetchTrendingBollywoodSongs()
+        fetchRealAudioForInitialSongs()
     }
     
-    // MARK: - Initial Bollywood & Indian Hits Catalog
+    // MARK: - Initial Bollywood Catalog (with metadata & synced lyrics)
     private func loadInitialCatalog() {
-        // High quality royalty-free & streaming audio links for instant playback
         allSongs = [
             Song(
                 id: "bw-1",
@@ -36,7 +38,7 @@ class MusicDataService: ObservableObject {
                 artist: "Arijit Singh, Pritam",
                 album: "Brahmāstra",
                 duration: 268,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                audioURLString: "https://aac.saavncdn.com/714/be9426f30a9e7420199da2ae841bc655_160.mp4",
                 artworkURLString: nil,
                 genre: "Romance",
                 isFavorite: true,
@@ -66,7 +68,7 @@ class MusicDataService: ObservableObject {
                 artist: "Arijit Singh, Sachin-Jigar",
                 album: "Bhediya",
                 duration: 261,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                audioURLString: "https://aac.saavncdn.com/131/ee595b12852e90c95a09cff98c199587_160.mp4",
                 artworkURLString: nil,
                 genre: "Romance",
                 isFavorite: false,
@@ -89,7 +91,7 @@ class MusicDataService: ObservableObject {
                 artist: "Jubin Nautiyal, Asees Kaur",
                 album: "Shershaah",
                 duration: 230,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+                audioURLString: "https://aac.saavncdn.com/393/d129fa8a29a008c2a39284224c653bc4_160.mp4",
                 artworkURLString: nil,
                 genre: "Melody",
                 isFavorite: true,
@@ -112,7 +114,7 @@ class MusicDataService: ObservableObject {
                 artist: "Diljit Dosanjh",
                 album: "MoonChild Era",
                 duration: 195,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                audioURLString: "https://aac.saavncdn.com/264/3dfd8885c35ff658e4e94b8e23f99e46_160.mp4",
                 artworkURLString: nil,
                 genre: "Punjabi Pop",
                 isFavorite: true,
@@ -133,7 +135,7 @@ class MusicDataService: ObservableObject {
                 artist: "Arijit Singh, Mithoon",
                 album: "Aashiqui 2",
                 duration: 262,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+                audioURLString: "https://aac.saavncdn.com/285/1e9389f470aa0a8523c914bf42bc261e_160.mp4",
                 artworkURLString: nil,
                 genre: "Romantic",
                 isFavorite: true,
@@ -157,7 +159,7 @@ class MusicDataService: ObservableObject {
                 artist: "Arijit Singh, Pritam",
                 album: "Ae Dil Hai Mushkil",
                 duration: 289,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+                audioURLString: "https://aac.saavncdn.com/139/2e604f3ae4608fcfa2fa74ef3dca603f_160.mp4",
                 artworkURLString: nil,
                 genre: "Sufi / Sad",
                 isFavorite: false,
@@ -179,7 +181,7 @@ class MusicDataService: ObservableObject {
                 artist: "Arijit Singh, Shilpa Rao",
                 album: "War",
                 duration: 302,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+                audioURLString: "https://aac.saavncdn.com/743/2e38c9fe4d2df412030fbe8f1a141b71_160.mp4",
                 artworkURLString: nil,
                 genre: "Dance / Party",
                 isFavorite: false,
@@ -199,7 +201,7 @@ class MusicDataService: ObservableObject {
                 artist: "Arijit Singh, Pritam",
                 album: "Yeh Jawaani Hai Deewani",
                 duration: 228,
-                audioURLString: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+                audioURLString: "https://aac.saavncdn.com/139/26cf1a1532f831ecad2a537f7a77e384_160.mp4",
                 artworkURLString: nil,
                 genre: "Travel / Feel Good",
                 isFavorite: true,
@@ -249,43 +251,117 @@ class MusicDataService: ObservableObject {
         artists = [
             Artist(
                 name: "Arijit Singh",
-                monthlyListeners: "42.8M Listeners",
-                imageName: "person.circle.fill",
-                topSongIds: ["bw-1", "bw-2", "bw-5", "bw-6", "bw-8"],
-                gradientColors: [Color(hex: "#FF4E50"), Color(hex: "#F9D423")]
+                monthlyListeners: "38.5M monthly listeners",
+                imageName: "person.crop.circle.fill",
+                topSongIds: ["bw-1", "bw-2", "bw-5", "bw-6", "bw-7", "bw-8"],
+                gradientColors: [Color(hex: "#FF512F"), Color(hex: "#DD2476")]
             ),
             Artist(
                 name: "Diljit Dosanjh",
-                monthlyListeners: "24.5M Listeners",
-                imageName: "person.circle.fill",
+                monthlyListeners: "22.1M monthly listeners",
+                imageName: "person.crop.circle.fill",
                 topSongIds: ["bw-4"],
-                gradientColors: [Color(hex: "#06B6D4"), Color(hex: "#3B82F6")]
-            ),
-            Artist(
-                name: "Shreya Ghoshal",
-                monthlyListeners: "31.2M Listeners",
-                imageName: "person.circle.fill",
-                topSongIds: ["bw-3"],
-                gradientColors: [Color(hex: "#EC4899"), Color(hex: "#8B5CF6")]
+                gradientColors: [Color(hex: "#8A2387"), Color(hex: "#E94057")]
             ),
             Artist(
                 name: "Pritam",
-                monthlyListeners: "28.9M Listeners",
-                imageName: "person.circle.fill",
+                monthlyListeners: "29.4M monthly listeners",
+                imageName: "person.crop.circle.fill",
                 topSongIds: ["bw-1", "bw-6", "bw-8"],
-                gradientColors: [Color(hex: "#10B981"), Color(hex: "#06B6D4")]
+                gradientColors: [Color(hex: "#11998E"), Color(hex: "#38EF7D")]
             ),
             Artist(
                 name: "Jubin Nautiyal",
-                monthlyListeners: "19.3M Listeners",
-                imageName: "person.circle.fill",
+                monthlyListeners: "19.8M monthly listeners",
+                imageName: "person.crop.circle.fill",
                 topSongIds: ["bw-3"],
-                gradientColors: [Color(hex: "#F59E0B"), Color(hex: "#EF4444")]
+                gradientColors: [Color(hex: "#4E54C8"), Color(hex: "#8F94FB")]
             )
         ]
     }
     
-    // MARK: - Live Online Bollywood Search (JioSaavn API with Fallback)
+    // MARK: - Auto-Fetch Real Audio URLs for Initial Songs
+    private func fetchRealAudioForInitialSongs() {
+        for index in 0..<allSongs.count {
+            let songTitle = allSongs[index].title
+            guard let encoded = songTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                  let url = URL(string: "https://www.jiosaavn.com/api.php?__call=search.getResults&_format=json&_marker=0&api_version=4&p=1&n=5&q=\(encoded)") else {
+                continue
+            }
+            
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+                guard let data = data, error == nil else { return }
+                if let decoded = try? JSONDecoder().decode(DirectSaavnResponse.self, from: data),
+                   let firstMatch = decoded.results?.first(where: { $0.streamURL != nil }),
+                   let stream = firstMatch.streamURL {
+                    DispatchQueue.main.async {
+                        if let idx = self?.allSongs.firstIndex(where: { $0.title == songTitle }) {
+                            self?.allSongs[idx].audioURLString = stream
+                            if let img = firstMatch.bestImageURL {
+                                self?.allSongs[idx].artworkURLString = img
+                            }
+                        }
+                    }
+                }
+            }.resume()
+        }
+    }
+    
+    // MARK: - Fetch Trending Bollywood Songs from JioSaavn
+    func fetchTrendingBollywoodSongs() {
+        guard let url = URL(string: "https://www.jiosaavn.com/api.php?__call=search.getResults&_format=json&_marker=0&api_version=4&p=1&n=15&q=bollywood%20hindi%20latest%20hits") else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data, error == nil else { return }
+            do {
+                let decoded = try JSONDecoder().decode(DirectSaavnResponse.self, from: data)
+                if let results = decoded.results, !results.isEmpty {
+                    let onlineSongs: [Song] = results.compactMap { item in
+                        guard let streamUrl = item.streamURL, !streamUrl.isEmpty else { return nil }
+                        let dur = TimeInterval(item.duration ?? "240") ?? 240
+                        
+                        return Song(
+                            id: "saavn-\(item.id)",
+                            title: item.resolvedTitle,
+                            artist: item.resolvedArtist,
+                            album: (item.album ?? "Bollywood Hit").decodingHTMLEntities(),
+                            duration: dur,
+                            audioURLString: streamUrl,
+                            artworkURLString: item.bestImageURL,
+                            genre: (item.language?.capitalized ?? "Bollywood"),
+                            isFavorite: false,
+                            lyrics: [
+                                LyricLine(time: 0, text: "♪ Now Playing ♪"),
+                                LyricLine(time: 10, text: "\(item.resolvedTitle)"),
+                                LyricLine(time: 25, text: "Vocals by \(item.resolvedArtist)")
+                            ],
+                            year: item.year ?? "2023",
+                            plays: Int.random(in: 500000...4500000),
+                            gradientHexes: ["#FF4E50", "#6366F1"]
+                        )
+                    }
+                    
+                    DispatchQueue.main.async {
+                        if !onlineSongs.isEmpty {
+                            self?.trendingBollywood = onlineSongs
+                            // Merge into allSongs
+                            for song in onlineSongs {
+                                if let existing = self?.allSongs, !existing.contains(where: { $0.title.lowercased() == song.title.lowercased() }) {
+                                    self?.allSongs.append(song)
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch {
+                print("Failed decoding trending songs: \(error.localizedDescription)")
+            }
+        }.resume()
+    }
+    
+    // MARK: - Live Search Bollywood Songs (Direct JioSaavn API + DES Audio Decryption)
     func searchSongs(query: String) {
         guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
             searchResults = []
@@ -295,7 +371,7 @@ class MusicDataService: ObservableObject {
         
         isSearching = true
         
-        // First match in local catalog instantly
+        // Match in local catalog first
         let localMatches = allSongs.filter {
             $0.title.localizedCaseInsensitiveContains(query) ||
             $0.artist.localizedCaseInsensitiveContains(query) ||
@@ -304,9 +380,9 @@ class MusicDataService: ObservableObject {
         }
         self.searchResults = localMatches
         
-        // Then query JioSaavn online API asynchronously
+        // Query JioSaavn official direct API
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "https://saavn.dev/api/search/songs?query=\(encodedQuery)") else {
+              let url = URL(string: "https://www.jiosaavn.com/api.php?__call=search.getResults&_format=json&_marker=0&api_version=4&p=1&n=25&q=\(encodedQuery)") else {
             self.isSearching = false
             return
         }
@@ -317,26 +393,26 @@ class MusicDataService: ObservableObject {
                 guard let data = data, error == nil else { return }
                 
                 do {
-                    let decoded = try JSONDecoder().decode(JioSaavnSearchResponse.self, from: data)
-                    if let results = decoded.data?.results, !results.isEmpty {
+                    let decoded = try JSONDecoder().decode(DirectSaavnResponse.self, from: data)
+                    if let results = decoded.results, !results.isEmpty {
                         let onlineSongs: [Song] = results.compactMap { item in
-                            guard let streamUrl = item.bestDownloadURL, !streamUrl.isEmpty else { return nil }
+                            guard let streamUrl = item.streamURL, !streamUrl.isEmpty else { return nil }
                             let songDuration = TimeInterval(item.duration ?? "210") ?? 210
                             
                             return Song(
                                 id: "saavn-\(item.id)",
                                 title: item.resolvedTitle,
                                 artist: item.resolvedArtist,
-                                album: item.album?.name ?? "Bollywood Single",
+                                album: (item.album ?? "Bollywood Single").decodingHTMLEntities(),
                                 duration: songDuration,
                                 audioURLString: streamUrl,
                                 artworkURLString: item.bestImageURL,
-                                genre: item.language?.capitalized ?? "Bollywood",
+                                genre: (item.language?.capitalized ?? "Bollywood"),
                                 isFavorite: false,
                                 lyrics: [
-                                    LyricLine(time: 0, text: "Lyrics available on JioSaavn"),
-                                    LyricLine(time: 15, text: "♪ \(item.resolvedTitle) ♪"),
-                                    LyricLine(time: 30, text: "By \(item.resolvedArtist)")
+                                    LyricLine(time: 0, text: "♪ \(item.resolvedTitle) ♪"),
+                                    LyricLine(time: 15, text: "Artist: \(item.resolvedArtist)"),
+                                    LyricLine(time: 30, text: "Album: \(item.album ?? "Bollywood")")
                                 ],
                                 year: item.year,
                                 plays: Int.random(in: 100000...3500000),
@@ -354,7 +430,7 @@ class MusicDataService: ObservableObject {
                         self?.searchResults = combined
                     }
                 } catch {
-                    // If JSON decode fails, keep local search results
+                    print("Search JSON decode error: \(error.localizedDescription)")
                 }
             }
         }.resume()
